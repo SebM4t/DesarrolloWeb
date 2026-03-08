@@ -1,0 +1,93 @@
+:root {
+    --amarillo:      #C9A84C;
+    --amarillo-dark: #A67C00;
+    --amarillo-light:#F0D080;
+    --texto-oscuro:  #2c2c2c;
+}
+
+/* ── NAVBAR ─────────────────────────────── */
+.navbar {
+    background-color: var(--amarillo) !important;
+    padding: 0;
+}
+
+.navbar-brand {
+    color: var(--texto-oscuro) !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+}
+
+.nav-link {
+    color: var(--texto-oscuro) !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    padding: 0.75rem 1.2rem !important;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background-color: var(--amarillo-dark) !important;
+    color: #fff !important;
+}
+
+/* ── SECCIONES INFO ──────────────────────── */
+.seccion-info {
+    background-color: var(--amarillo-light);
+    border: 1px solid var(--amarillo);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.seccion-info .card-title {
+    font-weight: 700;
+    color: var(--texto-oscuro);
+    font-size: 1rem;
+}
+
+.seccion-info .card-text {
+    font-size: 0.92rem;
+    color: var(--texto-oscuro);
+    text-align: justify;
+}
+
+/* ── HISTORIA ────────────────────────────── */
+.card-historia {
+    background-color: var(--amarillo);
+    border: none;
+    border-radius: 6px;
+    padding: 1.5rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.card-historia .card-title {
+    font-weight: 700;
+    text-align: center;
+    color: var(--texto-oscuro);
+    margin-bottom: 1rem;
+}
+
+.card-historia .card-text {
+    font-size: 0.92rem;
+    text-align: justify;
+    color: var(--texto-oscuro);
+}
+
+/* ── FOOTER ──────────────────────────────── */
+.footer-placas {
+    background-color: var(--amarillo);
+    color: var(--texto-oscuro);
+    text-align: center;
+    padding: 1rem 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 2rem;
+}
