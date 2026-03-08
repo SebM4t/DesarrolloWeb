@@ -60,7 +60,7 @@
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-<<<<<<< HEAD
+
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -81,8 +81,7 @@
                     <artifactId>webjars-locator-core</artifactId>
                 </dependency>
                 
-=======
->>>>>>> f47ed51836338af13f4154e584401cc10cc62a97
+
 	</dependencies>
 
 	<build>
