@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+# --- SEGURIDAD Y CREDENCIALES ---
+# Bloquear cualquier JSON en la carpeta de Firebase
+src/main/resources/firebase/*.json
