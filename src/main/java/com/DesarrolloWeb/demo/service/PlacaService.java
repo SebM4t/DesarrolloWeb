@@ -3,6 +3,7 @@ import com.DesarrolloWeb.demo.model.Placa;
 import com.DesarrolloWeb.demo.repository.PlacaRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class PlacaService {
@@ -38,6 +39,14 @@ return placaRepository.save(placa);
 
 public void eliminar(Long id) {
 placaRepository.deleteById(id);
+}
+
+
+public void save(Placa placa, MultipartFile imagenFile) {
+    if (!imagenFile.isEmpty()) {
+
+    }
+    placaRepository.save(placa);
 }
     
 }

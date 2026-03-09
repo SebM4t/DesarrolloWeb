@@ -26,34 +26,49 @@ this.categoriaService = categoriaService;
 // Lista completa del catálogo
 @GetMapping
 public String catalogo(
-@RequestParam(required = false) Long categoriaId,
-@RequestParam(required = false) String material,
-Model model) {
-List<Placa> placas;
-List<Categoria> categorias = categoriaService.listarTodas();
-if (categoriaId != null) {
-placas = placaService.listarPorCategoria(categoriaId);
-} else if (material != null && !material.isEmpty()) {
-placas = placaService.listarPorMaterial(material);
-} else {
-placas = placaService.listarDisponibles();
-}
-model.addAttribute("placas", placas);
-model.addAttribute("categorias", categorias);
-model.addAttribute("categoriaSeleccionada", categoriaId);
-model.addAttribute("materialSeleccionado", material);
-return "catalogo";
+        @RequestParam(required = false) Long categoriaId,
+        @RequestParam(required = false) String material,
+        Model model) {
+    
+    List<Placa> listaCompleta;
+    List<Categoria> categorias = categoriaService.listarTodas();
+
+
+    if (categoriaId != null) {
+        listaCompleta = placaService.listarPorCategoria(categoriaId);
+    } else if (material != null && !material.isEmpty()) {
+        listaCompleta = placaService.listarPorMaterial(material);
+    } else {
+        listaCompleta = placaService.listarDisponibles();
+    }
+
+    List<Placa> placas = listaCompleta.stream()
+            .filter(p -> p.getCategoria() != null && "Placas Conmemorativas".equalsIgnoreCase(p.getCategoria().getNombre()))
+            .toList(); 
+            
+    List<Placa> trofeos = listaCompleta.stream()
+            .filter(p -> p.getCategoria() != null && "Trofeos y Reconocimientos".equalsIgnoreCase(p.getCategoria().getNombre()))
+            .toList();
+
+
+    model.addAttribute("placas", placas);
+    model.addAttribute("trofeos", trofeos);
+    model.addAttribute("categorias", categorias);
+    model.addAttribute("categoriaSeleccionada", categoriaId);
+    model.addAttribute("materialSeleccionado", material);
+    
+    return "catalogo/catalogo";
 }
 
-// Detalle de una placa
+
 @GetMapping("/{id}")
 public String detalle(@PathVariable Long id, Model model) {
-Placa placa = placaService.buscarPorId(id);
-if (placa == null) {
-return "redirect:/catalogo";
-}
-model.addAttribute("placa", placa);
-return "detalle";
+    Placa placa = placaService.buscarPorId(id);
+    if (placa == null) {
+        return "redirect:/catalogo"; 
+    }
+    model.addAttribute("placa", placa); 
+    return "catalogo/detalle"; 
 }
 
 }

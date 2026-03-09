@@ -28,6 +28,8 @@ private java.math.BigDecimal precio;
 
 @Column(name = "imagen_nombre", length = 255)
 private String imagenNombre;
+@Transient 
+    private String imagenUrl;
 
 @Column(nullable = false)
 private Boolean disponible = true;

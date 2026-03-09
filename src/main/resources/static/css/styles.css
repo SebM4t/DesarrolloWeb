@@ -8,7 +8,9 @@
 /* ── NAVBAR ─────────────────────────────── */
 .navbar {
     background-color: var(--amarillo) !important;
-    padding: 0;
+    display: flex;
+    margin: 0 !important; /* Fuerza a eliminar cualquier margen */
+    padding: 0 !important;
 }
 
 .navbar-brand {
@@ -90,4 +92,22 @@
     font-size: 0.85rem;
     font-weight: 600;
     margin-top: 2rem;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    /* Esto asegura que nada empuje hacia abajo el contenido */
+}
+
+/* Esto asegura que todas las tarjetas midan lo mismo */
+.card {
+    height: 380px !important; /* Ajusta este valor según necesites */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Esto asegura que el cuerpo de la tarjeta ocupe el espacio sobrante */
+.card-body {
+    flex: 1 1 auto;
 }

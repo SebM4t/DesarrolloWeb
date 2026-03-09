@@ -1,6 +1,13 @@
 -- 1. Crear la base de datos
 CREATE DATABASE IF NOT EXISTS placas_db;
 
+-- Creación de usuarios con contraseñas seguras (idealmente asignadas fuera del script)
+create user 'usuario_cdlp'@'%' identified by 'Usuar1o_Clave.';
+-- Asignación de permisos
+-- Se otorgan permisos específicos en lugar de todos los permisos a todas las tablas futuras
+grant select, insert, update, delete on placas_db.* to 'usuario_cdlp'@'%';
+flush privileges;
+
 USE placas_db;
 
 -- 2. Tabla de categorías
