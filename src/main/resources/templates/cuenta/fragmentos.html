@@ -4,5 +4,94 @@
     <div class="container mt-5">
         <h1>Cuenta y Detalle</h1>
     </div>
+    
+    <!-- Fragmento iniciar sesion-->
+    <section th:fragment="loginForm">
+        <div class="container mt-5">
+        <h1>Cuenta y Detalle</h1>
+    </div>
+
+    <div class="d-flex justify-content-center">
+
+        <div class="card p-4 shadow mx-auto" style="max-width:450px;">
+
+            <h4 class="text-center mb-3">Iniciar sesión</h4>
+
+            <form th:action="@{/login}" method="post">
+
+                <div class="mb-3">
+                    <label class="form-label">Usuario</label>
+                    <input type="text" class="form-control" name="usuario">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" name="password">
+                </div>
+
+                <button type="submit" class="btn btn-warning w-100">
+                    Ingresar
+                </button>
+
+                <div class="text-center mt-3">
+                    <a th:href="@{/registro}">Registrarse</a>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+    <!-- Fragmento registro -->
+    
+    <section th:fragment="registroForm">
+        <div class="container mt-5">
+        <h1>Cuenta y Detalle</h1>
+    </div>
+
+    <div class="card p-4 shadow mx-auto" style="max-width:450px;">
+
+        <h4 class="text-center mb-3">Crear cuenta</h4>
+
+        <form th:action="@{/registro}" method="post">
+
+            <div class="mb-3">
+                <label class="form-label">Nombre completo</label>
+                <input type="text" class="form-control" name="nombreCompleto">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Teléfono</label>
+                <input type="tel" class="form-control" name="telefono">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Correo</label>
+                <input type="email" class="form-control" name="correo">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Usuario</label>
+                <input type="text" class="form-control" name="usuario">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Contraseña</label>
+                <input type="password" class="form-control" name="password">
+            </div>
+
+            <button type="submit" class="btn btn-warning w-100">
+                Registrarse
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
 
 </section>
