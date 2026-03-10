@@ -60,7 +60,7 @@ public class EmpresaController {
         model.addAttribute("categoriaSeleccionada", idCategoria);
         model.addAttribute("materialSeleccionado", material);
 
-        return "empresas/empresas";
+        return "empresas/listado";
     }
 
     @GetMapping("/{idPlaca}")
