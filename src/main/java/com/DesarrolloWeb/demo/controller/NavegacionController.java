@@ -7,23 +7,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class NavegacionController {
 
     @GetMapping("/disenar")
-    public String disenar() { return "disenar/disenar"; }
+    public String disenar() { return "disenar/listado"; }
 
     @GetMapping("/galeria")
-    public String galeria() { return "galeria/galeria"; }
+    public String galeria() { return "galeria/listado"; }
 
     @GetMapping("/funciones")
-    public String funciones() { return "funciones/funciones"; }
+    public String funciones() { return "funciones/listado"; }
 
     @GetMapping("/faq")
-    public String faq() { return "faq/faq"; }
+    public String faq() { return "faq/listado"; }
 
     @GetMapping("/soporte")
-    public String soporte() { return "soporte/soporte"; }
+    public String soporte() { return "soporte/listado"; }
     
     @GetMapping("/carrito")
-    public String carrito() { return "carrito/carrito"; }
+    public String carrito() { return "carrito/listado"; }
     
     @GetMapping("/cuenta")
-    public String cuenta() { return "carrito/carrito"; }
+    public String cuenta() { return "cuenta/listado"; }
 }
