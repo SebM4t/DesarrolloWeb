@@ -12,12 +12,6 @@ public class NavegacionController {
     @GetMapping("/galeria")
     public String galeria() { return "galeria/galeria"; }
 
-    @GetMapping("/empresas")
-    public String empresas() { return "empresas/empresas"; }
-
-    @GetMapping("/mascotas")
-    public String mascotas() { return "mascotas/mascotas"; }
-
     @GetMapping("/funciones")
     public String funciones() { return "funciones/funciones"; }
 

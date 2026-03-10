@@ -1,32 +1,33 @@
 package com.DesarrolloWeb.demo.service;
-import com.DesarrolloWeb.demo.model.Categoria;
+
+import com.DesarrolloWeb.demo.domain.Categoria;
 import com.DesarrolloWeb.demo.repository.CategoriaRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
 public class CategoriaService {
-    
-private final CategoriaRepository categoriaRepository;
 
-public CategoriaService(CategoriaRepository categoriaRepository) {
-this.categoriaRepository = categoriaRepository;
-}
+    private final CategoriaRepository categoriaRepository;
 
-public List<Categoria> listarTodas() {
-return categoriaRepository.findAll();
-}
+    public CategoriaService(CategoriaRepository categoriaRepository) {
+        this.categoriaRepository = categoriaRepository;
+    }
 
-public Categoria buscarPorId(Long id) {
-return categoriaRepository.findById(id).orElse(null);
-}
+    public List<Categoria> listarTodas() {
+        return categoriaRepository.findAll();
+    }
 
-public Categoria guardar(Categoria categoria) {
-return categoriaRepository.save(categoria);
-}
+    public Categoria buscarPorId(Integer idCategoria) {
+        return categoriaRepository.findById(idCategoria).orElse(null);
+    }
 
-public void eliminar(Long id) {
-categoriaRepository.deleteById(id);
+    public Categoria guardar(Categoria categoria) {
+        return categoriaRepository.save(categoria);
+    }
+
+    public void eliminar(Integer idCategoria) {
+        categoriaRepository.deleteById(idCategoria);
     }
 
 }

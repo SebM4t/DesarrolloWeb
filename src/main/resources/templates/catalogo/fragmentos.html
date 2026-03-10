@@ -1,20 +1,10 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>Catálogo</title>
-    <th:block th:replace="~{general/fragments :: head_recursos}"></th:block>
-</head>
-
-<body>
-    <nav th:replace="~{general/fragments :: navbar}"></nav>
-
+<section th:fragment="catalogoProducto">
     <div class="container mt-4">
         <h2 class="mb-5 fw-bold text-center">Catálogo de Productos</h2>
 
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <h4 class="text-center mb-3">Placas Conmemorativas</h4>
                 <div class="row">
                     <div class="col-6 mb-4" th:each="placa : ${placas}">
@@ -32,7 +22,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <h4 class="text-center mb-3">Trofeos y Reconocimientos</h4>
                 <div class="row">
                     <div class="col-6 mb-4" th:each="trofeo : ${trofeos}">
@@ -51,7 +41,31 @@
             </div>
         </div>
     </div>
+</section>
 
-    <footer th:replace="~{general/fragments :: footer}"></footer>
-</body>
-</html>
+<!-- Para la página detalle -->
+<section th:fragment="detalleProducto">
+
+    <div class="container mt-5 p-5 bg-warning rounded">
+        <h2 class="text-center mb-4">DETALLE DEL PRODUCTO</h2>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <img th:src="${placa.imagenUrl}" class="img-fluid" alt="Placa"/>
+            </div>
+            <div class="col-md-6">
+                <h3 th:text="${placa.nombre}">Nombre</h3>
+                <p class="h4" th:text="'₡' + ${placa.precio}">Precio</p>
+                
+                <h5>Características</h5>
+                <p th:text="${placa.material}">Material</p>
+                <p th:text="${placa.tamanio}">Tamaño</p>
+                
+                <div class="mt-4">
+                    <button class="btn btn-success">AÑADIR AL CARRITO</button>
+                    <a href="/catalogo" class="btn btn-danger">REGRESAR</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

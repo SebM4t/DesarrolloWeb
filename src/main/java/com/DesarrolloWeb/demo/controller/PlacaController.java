@@ -1,6 +1,6 @@
 package com.DesarrolloWeb.demo.controller;
 
-import com.DesarrolloWeb.demo.model.Placa;
+import com.DesarrolloWeb.demo.domain.Placa;
 import com.DesarrolloWeb.demo.repository.PlacaRepository;
 import com.DesarrolloWeb.demo.service.PlacaService;
 import java.util.Locale;
@@ -43,11 +43,11 @@ public class PlacaController {
     }
 
     @PostMapping("/eliminar")
-    public String eliminar(@RequestParam Long id, RedirectAttributes redirectAttributes) { 
+    public String eliminar(@RequestParam Integer idPlaca, RedirectAttributes redirectAttributes) { 
         String titulo = "todoOk";
         String detalle = "mensaje.eliminado";
         try {
-            placaService.eliminar(id);
+            placaService.eliminar(idPlaca);
         } catch (Exception e) {
             titulo = "error";
             detalle = "placa.error"; // Asegúrate de tener este mensaje en tu archivo messages.properties
@@ -56,9 +56,9 @@ public class PlacaController {
         return "redirect:/placa/listado";
     }
 
-    @GetMapping("/modificar/{id}")
-    public String modificar(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes) {
-        Placa placa = placaService.buscarPorId(id); // Ajusta según tu servicio
+    @GetMapping("/modificar/{idPlaca}")
+    public String modificar(@PathVariable("idPlaca") Integer idPlaca, Model model, RedirectAttributes redirectAttributes) {
+        Placa placa = placaService.buscarPorId(idPlaca); // Ajusta según tu servicio
         if (placa == null) {
             redirectAttributes.addFlashAttribute("error", messageSource.getMessage("placa.noEncontrada", null, Locale.getDefault()));
             return "redirect:/placa/listado";
