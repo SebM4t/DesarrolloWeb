@@ -31,5 +31,5 @@ public class NavegacionController {
     public String carrito() { return "carrito/carrito"; }
     
     @GetMapping("/cuenta")
-    public String cuenta() { return "carrito/carrito"; }
+    public String cuenta() { return "cuenta/cuenta"; }
 }

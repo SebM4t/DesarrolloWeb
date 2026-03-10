@@ -1,18 +1,86 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>Mi cuenta</title>
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Mi cuenta</title>
+
     <th:block th:replace="~{general/fragments :: head_recursos}"></th:block>
 </head>
-<body>
-    <nav th:replace="~{general/fragments :: navbar}"></nav>
 
-    <div class="container mt-5">
-        <h1>Cuenta y detalle</h1>
+<body>
+
+<nav th:replace="~{general/fragments :: navbar}"></nav>
+
+<div class="container mt-5 mb-5">
+
+    <div class="d-flex justify-content-center">
+
+        <div class="card p-4 shadow mx-auto" style="max-width:450px;">
+
+            <h4 class="text-center mb-3">Iniciar sesión</h4>
+
+            <form th:action="@{/login}" method="post">
+
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Nombre de usuario</label>
+
+                    <input type="text"
+                           class="form-control"
+                           id="exampleInputEmail1"
+                           aria-describedby="usernameHelp"
+                           name="usuario">
+
+                    <div id="usernameHelp" class="form-text">
+                        Su nombre de usuario es único.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Contraseña</label>
+
+                    <input type="password"
+                           class="form-control"
+                           id="exampleInputPassword1"
+                           name="password">
+                </div>
+                 <div class="text-center mt-3">
+                    <a href="#">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <div class="mb-3 form-check">
+                    <input type="checkbox"
+                           class="form-check-input"
+                           id="exampleCheck1">
+
+                    <label class="form-check-label" for="exampleCheck1">
+                        Recuerdame
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-warning w-100">
+                    Ingresar
+                </button>
+               
+               
+
+               
+                <div class="text-center">
+                    <a th:href="@{/registro}" class="btn btn-link">
+                        Registrarse
+                    </a>
+                </div>
+
+            </form>
+
+        </div>
+
     </div>
 
-    <footer th:replace="~{general/fragments :: footer}"></footer>
+</div>
+
+<footer th:replace="~{general/fragments :: footer}"></footer>
+
 </body>
 </html>
