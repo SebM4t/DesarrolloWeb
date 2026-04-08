@@ -50,6 +50,22 @@
                         </a>
                     </li>
                 </ul>
+                
+                ****************
+                <div id="resultBlock">
+                </div>
+                <ul class="navbar-nav" sec:authorize="!isAuthenticated()">
+                     <li class="nav-item my-auto">
+                        <a class="nav-link" th:href="@{/login}">
+                            <i class="fas fa-sign-in-alt"> </i>
+                                <span class="ms-1"> [[#{login.login}]]</span>
+                            
+                        </a>
+                        
+                    </li>
+                </ul>
+                *******************
+                
             </div>
         </div>
     </nav>
