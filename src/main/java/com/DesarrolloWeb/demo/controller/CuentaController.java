@@ -6,47 +6,38 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 @Controller
 public class CuentaController {
-  
-    @GetMapping("/cuenta")
-    public String mostrarLogin(Model model) {
-       
-        return "cuenta/listado"; 
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
     }
 
- 
-    @PostMapping("/login")
-    public String procesarLogin(@RequestParam String usuario,
-                                @RequestParam String password,
-                                Model model) {
+    @GetMapping("/cuenta")
+    public String mostrarCuenta(Model model) {
+        return "cuenta/listado";
+    }
 
-       
-            return "cuenta/listado"; 
-        }
-    
-
-   
     @GetMapping("/registro")
     public String mostrarRegistro(Model model) {
-        return "cuenta/detalle"; 
+        return "cuenta/detalle";
+
     }
 
-    
     @PostMapping("/registro")
     public String registrarUsuario(@RequestParam String nombreCompleto,
-                                   @RequestParam String telefono,
-                                   @RequestParam String correo,
-                                   @RequestParam String usuario,
-                                   @RequestParam String password,
-                                   Model model) {
+            @RequestParam String telefono,
+            @RequestParam String correo,
+            @RequestParam String usuario,
+            @RequestParam String password,
+            Model model) {
 
-        
+        return "redirect:/login";
+    }
 
-        return "redirect:/cuenta"; 
+    @GetMapping("/registro/nuevo")
+    public String registro() {
+        return "registro";
     }
 }
-
-
-

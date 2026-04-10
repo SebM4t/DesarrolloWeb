@@ -1,142 +1,236 @@
 <!DOCTYPE html>
-<!-- Fragmento #1 que irá en el head de todas las páginas, así se incluye todo lo necesario de configuración-->
-<head th:fragment="head">
-    <title>La Casa de la Placa</title>
-    <meta charset="UTF-8"/>
-    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
-    <link th:href="@{/webjars/font-awesome/css/all.css}" rel="stylesheet"/>
-    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
-    <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
-    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-</head>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <!-- Fragmento #1 que irá en el head de todas las páginas, así se incluye todo lo necesario de configuración-->
+    <head th:fragment="head">
+        <title>La Casa de la Placa</title>
+        <meta charset="UTF-8"/>
+        <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
+        <link th:href="@{/webjars/font-awesome/css/all.css}" rel="stylesheet"/>
+        <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+        <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    </head>
 
-<!-- Fragmento #2  define el encabezado de las páginas, en concreto el menú y enlaces rápidos -->
-<header th:fragment="header" class="header">
-    <nav class="navbar navbar-expand-lg" style="background-color: #E2B844">
+    <!-- Fragmento #2  define el encabezado de las páginas, en concreto el menú y enlaces rápidos -->
+    <header th:fragment="header" class="header">
+        <nav class="navbar navbar-expand-lg" style="background-color: #E2B844">
 
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarMenu"
-                    aria-controls="navbarMenu"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarMenu"
+                        aria-controls="navbarMenu"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <div class="collapse navbar-collapse" id="navbarMenu">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-flex gap-3">
-                    <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/catalogo}">Catálogo</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/disenar}">Diseñar</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/galeria}">Galería</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/empresas}">Empresas</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/mascotas}">Mascotas</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/funciones}">Funciones</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/faq}">FAQ</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/soporte}">Soporte</a></li>
+                <div class="collapse navbar-collapse" id="navbarMenu">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-flex gap-3">
+                        <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/catalogo}">Catálogo</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/disenar}">Diseñar</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/galeria}">Galería</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/empresas}">Empresas</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/mascotas}">Mascotas</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/funciones}">Funciones</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/faq}">FAQ</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/soporte}">Soporte</a></li>
 
-                </ul>
+                    </ul>
 
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/cuenta}">
-                            <i class="fa-solid fa-user"></i> Mi Cuenta
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/carrito}">
-                            <i class="fa-solid fa-cart-shopping"></i> Carrito
-                        </a>
-                    </li>
-                </ul>
-                
-                ****************
-                <div id="resultBlock">
+                    <ul class="navbar-nav ms-auto">
+
+                        <!-- Mi Cuenta -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-user"></i>
+                                <span sec:authorize="isAuthenticated()" sec:authentication="name"></span>
+                                <span sec:authorize="!isAuthenticated()">Mi Cuenta</span>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-end">
+
+                                <!-- SI NO está autenticado -->
+                                <li sec:authorize="!isAuthenticated()">
+                                    <a class="dropdown-item" th:href="@{/login}">
+                                        <i class="fas fa-sign-in-alt"></i> Autenticar
+                                    </a>
+                                </li>
+
+                                <!-- SI está autenticado -->
+                                <li sec:authorize="isAuthenticated()">
+                                    <button class="dropdown-item"
+                                            type="button"
+                                            data-bs-toggle="offcanvas"
+                                            data-bs-target="#offcanvasPerfil">
+
+                                        <i class="fa-solid fa-user"></i> Mi perfil
+
+                                    </button>
+                                </li>
+
+                                <li sec:authorize="isAuthenticated()">
+                                    <hr class="dropdown-divider">
+                                </li>
+
+                                <li sec:authorize="isAuthenticated()">
+                                    <form th:action="@{/logout}" method="post" style="margin:0;">
+                                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                        <button type="submit" class="dropdown-item">
+                                            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                                        </button>
+                                    </form>
+                                </li>
+
+                            </ul>
+                        </li>
+
+                        <li class="nav-item" sec:authorize="isAuthenticated()">
+                            <a class="nav-link" th:href="@{/carrito}">
+                                <i class="fa-solid fa-cart-shopping"></i> Carrito
+                            </a>
+                        </li>
+                    </ul>
+
+
+                    <!--<div id="resultBlock">
+                       </div>
+                       <ul class="navbar-nav" sec:authorize="!isAuthenticated()">
+                           <li class="nav-item my-auto">
+                               <a class="nav-link" th:href="@{/login}">
+                                   <i class="fas fa-sign-in-alt"> </i>
+                                    <span class="ms-1"> [[#{login.login}]]</span>
+       
+                               </a>
+       
+                           </li>
+                       </ul>-->
+
+
                 </div>
-                <ul class="navbar-nav" sec:authorize="!isAuthenticated()">
-                     <li class="nav-item my-auto">
-                        <a class="nav-link" th:href="@{/login}">
-                            <i class="fas fa-sign-in-alt"> </i>
-                                <span class="ms-1"> [[#{login.login}]]</span>
-                            
-                        </a>
-                        
-                    </li>
-                </ul>
-                *******************
-                
+            </div>
+        </nav>
+
+        <!-- OFFCANVAS PERFIL -->
+        <div class="offcanvas offcanvas-start"
+             tabindex="-1"
+             id="offcanvasPerfil"
+             aria-labelledby="offcanvasPerfilLabel">
+
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasPerfilLabel">
+                    Mi Perfil
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="offcanvas"
+                        aria-label="Close">
+                </button>
+            </div>
+
+            <div class="offcanvas-body text-center">
+
+                <i class="fas fa-user-circle fa-4x mb-3"></i>
+
+                <h5 sec:authentication="name"></h5>
+
+                <p class="text-muted">Bienvenido</p>
+
+                <hr>
+
+                <div class="d-grid gap-2">
+
+                    <a th:href="@{/cuenta}" class="btn btn-outline-dark">
+                        Mi cuenta
+                    </a>
+
+                    <form th:action="@{/logout}" method="post">
+                        <button class="btn btn-danger w-100">
+                            Cerrar sesión
+                        </button>
+                    </form>
+
+                </div>
+
             </div>
         </div>
-    </nav>
-</header>
 
-<!-- Fragmento #3 define el footer de las páginas, aparte de esto se podria incluir enlaces a redes socilaes y demás -->
-<footer th:fragment="footer" class="p-2 mt-5 text-black" style="background-color: #E2B844">
-    <p class="mb-0">© 2026 La Casa de la Placa — Todos los derechos reservados |
-        Desarrollado por <strong>Fidelitas, Grupo #7</strong>
-    </p>
-</footer>
+    </header>
 
-<!-- Fragmento #4 tablas del inicio con la historia de la empresa -->
-<section th:fragment="inicio">
-    <div class="container mt-4">
-        <div class="row g-3">
 
-            <div class="col-lg-7">
-                <div class="card border-0 mb-3" style="background-color: #E2B844">
-                    <div class="card-body p-3">
-                        <h5 class="card-title">Arma tu placa</h5>
-                        <p class="card-text" style="text-align: justify;">La sección "Arma tu placa" permite al usuario
-                            personalizar completamente su placa conmemorativa o reconocimiento.
-                            Aquí puede elegir el material, tamaño, forma, tipografía, íconos
-                            y mensaje personalizado, visualizando cada cambio en tiempo real.</p>
+
+    <!-- Fragmento #3 define el footer de las páginas, aparte de esto se podria incluir enlaces a redes socilaes y demás -->
+    <footer th:fragment="footer" class="p-2 mt-5 text-black" style="background-color: #E2B844">
+        <p class="mb-0">© 2026 La Casa de la Placa — Todos los derechos reservados |
+            Desarrollado por <strong>Fidelitas, Grupo #7</strong>
+        </p>
+    </footer>
+
+    <!-- Fragmento #4 tablas del inicio con la historia de la empresa -->
+    <section th:fragment="inicio">
+        <div class="container mt-4">
+            <div class="row g-3">
+
+                <div class="col-lg-7">
+                    <div class="card border-0 mb-3" style="background-color: #E2B844">
+                        <div class="card-body p-3">
+                            <h5 class="card-title">Arma tu placa</h5>
+                            <p class="card-text" style="text-align: justify;">La sección "Arma tu placa" permite al usuario
+                                personalizar completamente su placa conmemorativa o reconocimiento.
+                                Aquí puede elegir el material, tamaño, forma, tipografía, íconos
+                                y mensaje personalizado, visualizando cada cambio en tiempo real.</p>
+                        </div>
                     </div>
+
+                    <div class="card border-0 mb-3" style="background-color: #E2B844">
+                        <div class="card-body p-3">
+                            <h5 class="card-title">Reconocimientos</h5>
+                            <p class="card-text">La sección "Reconocimientos" permite a los usuarios
+                                crear placas destinadas a celebrar logros, méritos o agradecimientos.
+                                Aquí pueden seleccionar modelos predefinidos, personalizar mensajes,
+                                elegir estilos de tipografía y colores, y añadir elementos decorativos
+                                que refuercen el propósito del reconocimiento.</p>
+                        </div>
+                    </div>
+
+                    <div class="card border-0 mb-3" style="background-color: #E2B844">
+                        <div class="card-body p-3">
+                            <h5 class="card-title">Placas para Mascotas</h5>
+                            <p class="card-text" style="text-align: justify;">La sección "Placas para mascotas" está diseñada
+                                para que los usuarios creen placas identificativas o conmemorativas
+                                para sus animales. Ofrece opciones de forma, tamaño, material y
+                                grabado, además de íconos y elementos visuales relacionados
+                                con mascotas.</p>
+                        </div>
+                    </div>
+
                 </div>
 
-                <div class="card border-0 mb-3" style="background-color: #E2B844">
-                    <div class="card-body p-3">
-                        <h5 class="card-title">Reconocimientos</h5>
-                        <p class="card-text">La sección "Reconocimientos" permite a los usuarios
-                            crear placas destinadas a celebrar logros, méritos o agradecimientos.
-                            Aquí pueden seleccionar modelos predefinidos, personalizar mensajes,
-                            elegir estilos de tipografía y colores, y añadir elementos decorativos
-                            que refuercen el propósito del reconocimiento.</p>
-                    </div>
-                </div>
-
-                <div class="card border-0 mb-3" style="background-color: #E2B844">
-                    <div class="card-body p-3">
-                        <h5 class="card-title">Placas para Mascotas</h5>
-                        <p class="card-text" style="text-align: justify;">La sección "Placas para mascotas" está diseñada
-                            para que los usuarios creen placas identificativas o conmemorativas
-                            para sus animales. Ofrece opciones de forma, tamaño, material y
-                            grabado, además de íconos y elementos visuales relacionados
-                            con mascotas.</p>
+                <div class="col-lg-5 d-flex">
+                    <div class="card w-100" style="background-color: #E2B844">
+                        <div class="card-body p-3">
+                            <h5 class="card-title" style="text-align: center">Historia</h5>
+                            <p class="card-text" style="text-align: justify;">La "Fundición Jiménez" y "La Casa de la Placa"
+                                son empresas familiares fundadas en los años 90 en Concepción
+                                Arriba de Alajuelita, por el señor Jorge Jiménez Jiménez, como
+                                necesidad para sobrevivir y solventar la necesidad de placas
+                                conmemorativas de la zona y reconocimientos empresariales y
+                                estudiantiles. "La Casa de la Placa" fue creada como solución
+                                a la alta demanda de placas conmemorativas en pandemia, ya que
+                                los dueños actuales se dieron cuenta de que no daban a basto
+                                recibiendo solicitudes y produciendo. Separando las ventas de
+                                la producción lograron establecer una línea de negocio continua
+                                y sin problemas para recibir solicitudes.</p>
+                        </div>
                     </div>
                 </div>
 
             </div>
-
-            <div class="col-lg-5 d-flex">
-                <div class="card w-100" style="background-color: #E2B844">
-                    <div class="card-body p-3">
-                        <h5 class="card-title" style="text-align: center">Historia</h5>
-                        <p class="card-text" style="text-align: justify;">La "Fundición Jiménez" y "La Casa de la Placa"
-                            son empresas familiares fundadas en los años 90 en Concepción
-                            Arriba de Alajuelita, por el señor Jorge Jiménez Jiménez, como
-                            necesidad para sobrevivir y solventar la necesidad de placas
-                            conmemorativas de la zona y reconocimientos empresariales y
-                            estudiantiles. "La Casa de la Placa" fue creada como solución
-                            a la alta demanda de placas conmemorativas en pandemia, ya que
-                            los dueños actuales se dieron cuenta de que no daban a basto
-                            recibiendo solicitudes y produciendo. Separando las ventas de
-                            la producción lograron establecer una línea de negocio continua
-                            y sin problemas para recibir solicitudes.</p>
-                    </div>
-                </div>
-            </div>
-
         </div>
-    </div>
-</section>
+
+
+    </section>
