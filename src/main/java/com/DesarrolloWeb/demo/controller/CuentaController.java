@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -19,12 +20,6 @@ public class CuentaController {
         return "cuenta/listado";
     }
 
-    @GetMapping("/registro")
-    public String mostrarRegistro(Model model) {
-        return "cuenta/detalle";
-
-    }
-
     @PostMapping("/registro")
     public String registrarUsuario(@RequestParam String nombreCompleto,
             @RequestParam String telefono,
@@ -38,6 +33,6 @@ public class CuentaController {
 
     @GetMapping("/registro/nuevo")
     public String registro() {
-        return "registro";
+        return "cuenta/detalle";
     }
 }

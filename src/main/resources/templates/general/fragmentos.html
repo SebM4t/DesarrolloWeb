@@ -46,9 +46,18 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button"
                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-user"></i>
+
+                                <img th:if="${session.imagenUsuario != null}"
+                                     th:src="${session.imagenUsuario}"
+                                     height="40"
+                                     class="rounded-circle"/>
+
+                                <i th:if="${session.imagenUsuario == null}" 
+                                   class="fa-solid fa-user"></i>
+
                                 <span sec:authorize="isAuthenticated()" sec:authentication="name"></span>
                                 <span sec:authorize="!isAuthenticated()">Mi Cuenta</span>
+
                             </a>
 
                             <ul class="dropdown-menu dropdown-menu-end">
