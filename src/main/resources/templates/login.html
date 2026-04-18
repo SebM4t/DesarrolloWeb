@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{general/fragmentos :: head}"/>
+    <body>
+
+        <!--<header th:replace="~{general/fragmentos :: header}"/>-->
+
+        <div class="row my-5">
+            <div class="col-md-4 offset-md-4">
+
+                <div class="card shadow">
+
+                    <!-- HEADER -->
+                    <div class="card-header text-center" style="background-color: #E2B844; color:black;">
+                        <h2>[[#{login.login}]]</h2>
+                    </div>
+
+                    <div class="card-body">
+
+                        <form method="POST" th:action="@{/perform_login}">
+
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                            <!-- USUARIO -->
+                            <div class="mb-3">
+                                <label for="username">[[#{login.username}]]</label>
+                                <input class="form-control"
+                                       th:classappend="${param.error != null} ? 'is-invalid'"
+                                       id="username"
+                                       type="text"
+                                       name="username"
+                                       placeholder="Usuario">
+                            </div>
+
+                            <!-- PASSWORD -->
+                            <div class="mb-3">
+                                <label for="password">[[#{login.password}]]</label>
+                                <input class="form-control"
+                                       th:classappend="${param.error != null} ? 'is-invalid'"
+                                       id="password"
+                                       type="password"
+                                       name="password"
+                                       placeholder="Contraseña">
+                            </div>
+
+                            <!-- RECORDARME -->
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="remember-me" name="remember-me">
+                                    <label class="form-check-label" for="remember-me">
+                                        Recordarme
+                                    </label>
+                            </div>
+
+                            <!-- OLVIDÉ CONTRASEÑA -->
+                            <div class="text-center mb-3">
+                                <a th:href="@{/registro/recordar}">
+                                    ¿Olvidaste tu contraseña?
+                                </a>
+                            </div>
+
+                            <!-- BOTONES -->
+                            <div class="d-flex flex-column align-items-center mt-4 gap-3">
+
+                                <!-- REGISTRARSE -->
+                                <a th:href="@{/registro/nuevo}" class="btn btn-warning w-75 py-2">
+                                    <i class="fas fa-user-plus"></i> [[#{accion.registrar}]]
+                                </a>
+
+                                <!-- AUTENTICAR -->
+                                <button class="btn btn-success w-75 py-2" type="submit">
+                                    <i class="fas fa-sign-in-alt"></i> [[#{login.login}]]
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+
+                <!-- MANEHO DE ERROR -->
+                <div th:if="${param.error != null}" 
+                     class="alert alert-danger mt-3 text-center" role="alert">
+                    [[#{error.login}]]
+                </div>
+
+                <!-- LOGOUT -->
+                <div th:if="${param.logout != null}" 
+                     class="alert alert-success mt-3 text-center" role="alert">
+                    Sesión cerrada exitosamente.
+                </div>
+
+            </div>
+        </div>
+
+        <footer th:replace="~{general/fragmentos :: footer}"/>
+
+    </body>
+</html>
