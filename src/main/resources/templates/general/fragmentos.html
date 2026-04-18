@@ -87,7 +87,6 @@
 
                                 <li sec:authorize="isAuthenticated()">
                                     <form th:action="@{/logout}" method="post" style="margin:0;">
-                                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                         <button type="submit" class="dropdown-item">
                                             <i class="fas fa-sign-out-alt"></i> Cerrar sesión
                                         </button>

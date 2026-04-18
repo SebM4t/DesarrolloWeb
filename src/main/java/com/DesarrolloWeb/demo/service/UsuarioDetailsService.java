@@ -40,10 +40,11 @@ public class UsuarioDetailsService implements UserDetailsService {
 
         //Se cargan los roles del usuario y se generan como roles de seguridad...
         var roles = usuario.getRoles().stream()
-                .map(rol -> new SimpleGrantedAuthority("ROLE_" + rol.getRol()))
+                .map(rol -> new SimpleGrantedAuthority(rol.getRol()))
                 .collect(Collectors.toSet());
 
         //Se retorna el usuario con la información de él
+
         return new User(usuario.getUsername(), usuario.getPassword(), roles);
 
     }

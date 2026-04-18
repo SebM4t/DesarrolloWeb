@@ -22,110 +22,52 @@ public class SecurityConfig {
         this.rutaService = rutaService;
     }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        var rutas = rutaService.getRutas(); //recupera la tabla de rutas completa
-        http.authorizeHttpRequests(request -> {
-            for (Ruta ruta : rutas) {
-                if (ruta.isRequiereRol()) {
-                    request.requestMatchers(ruta.getRuta()).hasRole(ruta.getRol().getRol());
-                }else{
-                    request.requestMatchers(ruta.getRuta()).permitAll();
-                }
+@Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    var rutas = rutaService.getRutas(); 
+
+    http.authorizeHttpRequests(request -> {
+        // 1. ABRIR RUTAS TÉCNICAS (Esto es lo que te falta)
+        // loginProcessingUrl debe ser accesible para que Spring reciba los datos
+        request.requestMatchers("/login", "/loginProcessing", "/registro/**", "/error/**").permitAll();
+        request.requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**").permitAll();
+        request.requestMatchers("/").permitAll(); 
+
+        // 2. REGLAS DINÁMICAS
+        for (Ruta ruta : rutas) {
+            // Saltamos la raíz y el login para que no se bloqueen por accidente
+            if (ruta.getRuta().equals("/") || ruta.getRuta().equals("/login")) continue;
+
+            if (ruta.isRequiereRol() && ruta.getRol() != null) {
+                // IMPORTANTE: Usar hasAuthority porque tu Service ya pone "ROLE_"
+                request.requestMatchers(ruta.getRuta()).hasAuthority("ROLE_" + ruta.getRol().getRol());
+            } else {
+                request.requestMatchers(ruta.getRuta()).permitAll();
             }
-        
-                request.anyRequest().authenticated();
         }
-        );
-       
         
-        http.formLogin(form -> form
-                .loginPage("/login")
-                .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/", true)
-                .failureUrl("/login?error=true").permitAll()
-        ).logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout=true")
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID").permitAll()
-        ).exceptionHandling(ex -> ex.accessDeniedPage("/acceso_denegado")
-        ).sessionManagement(session -> session.maximumSessions(1).maxSessionsPreventsLogin(false)
-        );
+        request.anyRequest().authenticated();
+    });
 
-        return http.build();
-    }
+    http.formLogin(form -> form
+            .loginPage("/login")
+            .loginProcessingUrl("/login") // Este POST debe coincidir con el th:action del HTML
+            .defaultSuccessUrl("/", true)
+            .failureUrl("/login?error=true")
+            .permitAll()
+    );
 
-//    public static final String[] PUBLIC_URLS = {
-//        "/", "/index", "/fav/**", "/consultas/**", "/js/**", "/webjars/**", "/login",
-//        "/registro/**"
-//    };
-//
-//    public static final String[] USUARIO_URLS = {
-//        "/facturar/carrito"
-//    };
-//
-//    public static final String[] VENDEDOR_O_ADMIN_URLS = {
-//        "/producto/listado", "/categoria/listado"
-//    };
-//    public static final String[] ADMIN_URLS = {
-//        "/producto/**", "/categoria/**"
-//    };
-//
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http)
-//            throws Exception {
-//        http.authorizeHttpRequests(request -> request
-//                .requestMatchers(PUBLIC_URLS).permitAll()
-//                .requestMatchers(USUARIO_URLS).hasRole("USUARIO")
-//                .requestMatchers(VENDEDOR_O_ADMIN_URLS).hasAnyRole("VENDEDOR", "ADMIN")
-//                .requestMatchers(ADMIN_URLS).hasRole("ADMIN")
-//                .anyRequest().authenticated()
-//        ).formLogin(form -> form
-//                .loginPage("/login")
-//                .loginProcessingUrl("/perform_login")
-//                .defaultSuccessUrl("/", true)
-//                .failureUrl("/login?error=true")
-//                .permitAll()
-//        ).logout(logout -> logout
-//                .logoutUrl("/logout")
-//                .logoutSuccessUrl("/login?logout=true")
-//                .invalidateHttpSession(true)
-//                .deleteCookies("JSESSIONID")
-//                .permitAll()
-//        ).exceptionHandling(ex -> ex.accessDeniedPage("/acceso_denegado")
-//        ).sessionManagement(session -> session
-//                .maximumSessions(1)
-//                .maxSessionsPreventsLogin(false)
-//        );
-//
-//        return http.build();
-//    }
+    // Desactiva CSRF momentáneamente solo para probar si este es el bloqueo
+    http.csrf(csrf -> csrf.disable()); 
+
+    return http.build();
+}
+    
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-//    @Bean
-//    public UserDetailsService users(PasswordEncoder passwordEncoder) {
-//        UserDetails andres = User.builder()
-//                .username("andres")
-//                .password(passwordEncoder().encode("123"))
-//                .roles("ADMIN")
-//                .build();
-//        UserDetails laura = User.builder()
-//                .username("laura")
-//                .password(passwordEncoder().encode("456"))
-//                .roles("VENDEDOR")
-//                .build();
-//        UserDetails carlos = User.builder()
-//                .username("carlos")
-//                .password(passwordEncoder().encode("789"))
-//                .roles("USUARIO")
-//                .build();
-//        return new InMemoryUserDetailsManager(andres, laura, carlos);
-//
-//    }
+    
     @Autowired
     public void configurerGlobal(AuthenticationManagerBuilder build,
             @Lazy PasswordEncoder passwordEncoder,
