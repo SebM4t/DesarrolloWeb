@@ -124,7 +124,7 @@ INSERT INTO placa (nombre, descripcion, material, tamanio, precio, imagen_nombre
 
 
 INSERT INTO usuario (username, password, nombre, apellidos, correo, telefono, ruta_imagen, activo) VALUES  
-('andres','$2a$10$P1.w58XvnaYQUQgZUCk4aO/RTRl8EValluCqB3S2VMLTbRt.tlre.','Andrés','Gómez Rojas','andres@gmail.com','8888-1111','https://img2.rtve.es/i/?w=1600&i=1677587980597.jpg',1),
+('andres','$2a$10$P1.w58XvnaYQUQgZUCk4aO/RTRl8EValluCqB3S2VMLTbRt.tlre.','Andrés','Gómez Rojas','andres@gmail.com','8888-1111','https://media.gq.com.mx/photos/67e2e0ced89a1ddf0a935ad1/master/w_2560%2Cc_limit/Hombres%2520alfa.jpg',1),
 ('laura','$2a$10$GkEj.ZzmQa/aEfDmtLIh3udIH5fMphx/35d0EYeqZL5uzgCJ0lQRi','Laura','Fernández Soto','laura@gmail.com','8888-2222','https://img.freepik.com/fotos-premium/perfil-usuario-png-mujer-negocios-profesional-pegatina-fondo-transparente_53876-1049017.jpg',1),
 ('carlos','$2a$10$koGR7eS22Pv5KdaVJKDcge04ZB53iMiw76.UjHPY.XyVYlYqXnPbO','Carlos','Ramírez Vargas','carlos@gmail.com','8888-3333','https://img.freepik.com/foto-gratis/cruzado-confiado-fresco-latin-cruz_1368-2266.jpg?semt=ais_hybrid&w=740&q=80',1);
 
@@ -133,9 +133,16 @@ INSERT INTO rol (rol) VALUES ('ADMIN'), ('VENDEDOR'), ('USER');
 INSERT INTO usuario_rol (id_usuario, id_rol) VALUES (1,1), (1,2), (1,3), (2,2), (2,3), (3,3);
 
 -- Rutas
-INSERT INTO ruta (ruta, id_rol) VALUES ('/admin/**', 1), ('/usuarios/**', 1), ('/config/**', 1);
-INSERT INTO ruta (ruta, id_rol) VALUES ('/catalogo/crear', 2), ('/catalogo/editar/**', 2), ('/pedidos/**', 2);
-INSERT INTO ruta (ruta, id_rol) VALUES ('/mascotas/**', 3), ('/cuenta/**', 3), ('/carrito/**', 3);
+INSERT INTO ruta (ruta, requiere_rol) VALUES 
+('/placa/**', false),
+('/disenar/**', false),
+('/galeria/**', false),
+('/empresas/**', false),
+('/mascotas/**', false),
+('/funciones/**', false),
+('/faq/**', false),
+('/soporte/**', false);
+
 INSERT INTO ruta (ruta,requiere_rol) VALUES 
 ('/',false),
 ('/index',false),
@@ -151,3 +158,6 @@ INSERT INTO ruta (ruta,requiere_rol) VALUES
 
 -- Consultas finales
 SELECT * FROM usuario;
+
+select * from placa;
+UPDATE placa SET id_categoria = 1, disponible = 1 WHERE id_categoria IS NULL;
