@@ -38,10 +38,25 @@
                                     <label class="fw-bold">Material / Detalle</label>
                                     <input type="text" name='material' class='form-control' required/>
                                 </div>
-                                <div class='mb-3 text-start'>
-                                    <label class="fw-bold">Imagen</label>
-                                    <input type="file" name='imagenFile' class='form-control'/>
-                                </div>
+                                
+                                <div class="modal-body">
+                                    <div class='mb-3'>
+                                        <label class="fw-bold">Descripción</label>
+                                        <textarea name='descripcion' class='form-control' required placeholder="Breve descripción..."></textarea>
+                                    </div>
+
+                                    <div class='mb-3'>
+                                        <label class="fw-bold">Tamaño (Dimensiones)</label>
+                                        <input type="text" name='tamanio' class='form-control' required placeholder="Ej: 20x30 cm"/>
+                                    </div>
+
+                                    <input type="hidden" name="disponible" value="true" />
+                                    
+                                    <div class='mb-3'>
+                                        <label class="fw-bold">Imagen</label>
+                                        <input type="file" name='imagenFile' class='form-control' onchange="mostrarImagen(this);"/>
+                                        <img id='blah' src='#' alt='vista previa' height="200" class="mt-2" style="display:none;"/>
+                                    </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-success w-100">Guardar en Catálogo</button>
@@ -60,27 +75,31 @@
                     <div class="col-md-8">
                         <h4 class="text-center mb-3">Placas Conmemorativas</h4>
                         <div class="row">
-                            <div class="col-6 mb-4" th:each="placa : ${placas}">
+                            <div class="col-6 mb-4" th:each="p : ${placas}">
                                 <div class="card h-100 shadow-sm border-0">
                                     <div class="card-img-top bg-light text-center p-2">
-                                        <img th:src="${placa.imagenNombre != null && !placa.imagenNombre.isEmpty() ? placa.imagenNombre : 'https://placehold.co/400x300?text=Sin+Imagen'}" 
+                                        <img th:src="${p.imagenNombre != null && !p.imagenNombre.isEmpty() ? p.imagenNombre : 'https://placehold.co/400x300?text=Sin+Imagen'}" 
                                              height="120" class="img-fluid rounded"/>
                                     </div>
                                     <div class="card-body">
-                                        <h6 class="card-title fw-bold" th:text="${placa.nombre}">Nombre</h6>
-                                        <p class="card-text small text-muted" th:text="${placa.material}">Material</p>
+                                        <h6 class="card-title fw-bold" th:text="${p.nombre}">Nombre</h6>
+                                        <p class="card-text small text-muted" th:text="${p.material}">Material</p>
                                     </div>
                                     <div class="card-footer bg-white border-0">
-                                        <a th:href="@{'/placa/detalle/' + ${placa.idPlaca}}" class="btn btn-sm btn-outline-dark w-100 mb-2">Ver detalle</a>
+                                        <a th:href="@{'/placa/detalle/' + ${p.idPlaca}}" class="btn btn-sm btn-outline-dark w-100 mb-2">Ver detalle</a>
 
-                                        <div class="d-flex gap-1" sec:authorize="hasAuthority('ADMIN')">
-                                            <a th:href="@{'/placa/modificar/' + ${placa.idPlaca}}" class="btn btn-sm btn-warning w-50">
+                                        <div class="d-flex justify-content-between gap-2 mt-2" sec:authorize="hasAuthority('ADMIN')">
+                                            <a th:href="@{'/placa/modificar/' + ${p.idPlaca}}" 
+                                               class="btn btn-warning btn-sm flex-fill d-flex align-items-center justify-content-center py-2">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <button class="btn btn-sm btn-danger w-50" 
-                                                    data-bs-toggle="modal" data-bs-target="#confirmModal"
-                                                    th:data-bs-id="${placa.idPlaca}" th:data-bs-nombre="${placa.nombre}">
-                                                <i class="fas fa-trash"></i>
+
+                                            <button type="button" class="btn btn-sm btn-danger w-50"
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#confirmModal"
+                                                    th:data-bs-id="${p.idPlaca}"
+                                                    th:data-bs-descripcion="${p.nombre}">
+                                                <i class="fa-solid fa-trash"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -122,12 +141,20 @@
                     <div class="card-header bg-dark text-white text-center">
                         <h4>Modificar Producto</h4>
                     </div>
-                    <form th:action="@{/placa/guardar}" th:object="${placa}" method="POST" enctype="multipart/form-data" class="p-4">
+                    <form th:action="@{/placa/guardar}" th:object="${placa}" method="POST" enctype="multipart/form-data">
                         <input type="hidden" th:field="*{idPlaca}" />
+                        <input type="hidden" th:field="*{disponible}" />
+                        <input type="hidden" name="categoria.idCategoria" th:value="${placa.categoria.idCategoria}" />
                         <div class="mb-3">
                             <label class="form-label fw-bold">Nombre</label>
                             <input type="text" th:field="*{nombre}" class="form-control" required />
                         </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Material</label>
+                            <input type="text" th:field="*{material}" class="form-control" required />
+                        </div>
+                        
                         <div class="mb-3">
                             <label class="form-label fw-bold">Precio</label>
                             <input type="number" th:field="*{precio}" class="form-control" required />
@@ -135,12 +162,12 @@
                         
                         <div class='mb-3'>
                             <label class="fw-bold">Descripción</label>
-                            <textarea name='descripcion' class='form-control' required placeholder="Descripción"></textarea>
+                            <textarea th:field="*{descripcion}" class='form-control' required></textarea>
                         </div>
 
                         <div class='mb-3'>
                             <label class="fw-bold">Tamaño (Dimensiones)</label>
-                            <input type="text" name='tamanio' class='form-control' required placeholder="Ej: 20x30 cm"/>
+                            <input type="text" th:field="*{tamanio}" class='form-control' required />
                         </div>
                         
                         <div class="mb-3 text-center">
@@ -156,28 +183,30 @@
             </div>
         </section>
 
-        <section th:fragment="confirmarEliminar">
-            <div class="modal fade" id="confirmModal" tabindex="-1">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form th:action="@{/placa/eliminar}" method="post">
-                            <input type="hidden" name="idPlaca" id="modalId"/>
-                            <div class="modal-header bg-danger text-white">
-                                <h5 class="modal-title">¿Eliminar del Catálogo?</h5>
-                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p>¿Seguro que quieres borrar: <strong id="modalNombre"></strong>?</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, cancelar</button>
-                                <button type="submit" class="btn btn-danger">Sí, eliminar</button>
-                            </div>
-                        </form>
+<section th:fragment="confirmarEliminar">
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form th:action="@{/placa/eliminar}" method="post">
+                    
+                    <input type="hidden" name="idPlaca" id="modalId" value=""/>
+                    
+                    <div class="modal-header bg-warning text-dark">
+                        <h5 class="modal-title">Confirmar Acción</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
-                </div>
+                    <div class="modal-body">
+                        <p>¿Seguro que quieres eliminar el producto? <strong id="modalDescripcion"></strong></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
             </div>
-        </section>
+        </div>
+    </div>
+</section>
 
         <section th:fragment="detalleProducto">
             <div class="container mt-5 p-5 bg-warning rounded">

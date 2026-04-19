@@ -40,13 +40,12 @@ public class PlacaController {
 
     @PostMapping("/guardar")
     public String guardar(@Valid Placa placa,
-            @RequestParam MultipartFile imagenFile,
+            @RequestParam(value = "imagenFile", required = false) MultipartFile imagenFile,
             RedirectAttributes redirectAttributes) {
-
         placaService.save(placa, imagenFile);
         redirectAttributes.addFlashAttribute("todoOk",
                 messageSource.getMessage("mensaje.actualizado", null, Locale.getDefault()));
-        return "redirect:/placa/listado";
+        return "redirect:/placa/catalogo";
     }
 
     @PostMapping("/eliminar")
@@ -61,7 +60,7 @@ public class PlacaController {
         }
         redirectAttributes.addFlashAttribute(titulo,
                 messageSource.getMessage(detalle, null, Locale.getDefault()));
-        return "redirect:/placa/listado";
+        return "redirect:/placa/catalogo";
     }
 
     @GetMapping("/modificar/{idPlaca}")

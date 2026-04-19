@@ -49,5 +49,20 @@ public class PlacaService {
         }
         placaRepository.save(placa);
     }
+    
+    public List<Placa> consultaJPQL(double precioInf, double precioSup){
+        return placaRepository.consultaJPQL(precioInf, precioSup);
+        
+    }
+
+    public List<Placa> consultaSQL(double precioInf, double precioSup){
+        return placaRepository.consultaSQL(precioInf, precioSup);
+    }
+
+    public List<Placa> consultaNombreSQL(String nombre){
+        return placaRepository.consultaNombreSQL(nombre);
+    }
+    
+    
 
 }
