@@ -6,7 +6,11 @@
     <body>
         <header th:replace="~{general/fragmentos :: header}"/>
         
-        <header th:replace="~{catalogo/fragmentos :: catalogoProducto}"/>
+        <div th:replace="~{catalogo/fragmentos :: agregar}"></div>
+        
+        <div th:replace="~{catalogo/fragmentos :: catalogoProducto}"></div>
+        
+        <div th:replace="~{catalogo/fragmentos :: confirmarEliminar}"></div>
         
         <footer th:replace="~{general/fragmentos :: footer}"/>
     </body>

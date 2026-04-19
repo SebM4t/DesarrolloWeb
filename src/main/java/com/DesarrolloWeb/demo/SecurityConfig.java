@@ -23,45 +23,41 @@ public class SecurityConfig {
     }
 
 @Bean
-public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    var rutas = rutaService.getRutas(); 
-
-    http.authorizeHttpRequests(request -> {
-        // 1. ABRIR RUTAS TÉCNICAS (Esto es lo que te falta)
-        // loginProcessingUrl debe ser accesible para que Spring reciba los datos
-        request.requestMatchers("/login", "/loginProcessing", "/registro/**", "/error/**").permitAll();
-        request.requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**").permitAll();
-        request.requestMatchers("/").permitAll(); 
-
-        // 2. REGLAS DINÁMICAS
-        for (Ruta ruta : rutas) {
-            // Saltamos la raíz y el login para que no se bloqueen por accidente
-            if (ruta.getRuta().equals("/") || ruta.getRuta().equals("/login")) continue;
-
-            if (ruta.isRequiereRol() && ruta.getRol() != null) {
-                // IMPORTANTE: Usar hasAuthority porque tu Service ya pone "ROLE_"
-                request.requestMatchers(ruta.getRuta()).hasAuthority("ROLE_" + ruta.getRol().getRol());
-            } else {
-                request.requestMatchers(ruta.getRuta()).permitAll();
-            }
-        }
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) 
+            throws Exception {
+        var rutas = rutaService.getRutas();
+        http.authorizeHttpRequests(request -> {
+                
+                for (Ruta ruta : rutas) {
+                    if (ruta.isRequiereRol()){
+                        request.requestMatchers(ruta.getRuta()).hasRole(ruta.getRol().getRol());
+                    } else {
+                        request.requestMatchers(ruta.getRuta()).permitAll();
+                    }
+                }
+                request.anyRequest().authenticated();
+        });
+http.formLogin(form -> form
+                .loginPage("/login")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/",true)
+                .failureUrl("/login?error=true")
+                .permitAll()
+        ).logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout=true")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll()   
+        ).exceptionHandling(ex -> ex.accessDeniedPage("/acceso_denegado")
+        ).sessionManagement(session -> session
+                .maximumSessions(1)
+                .maxSessionsPreventsLogin(false)
+  
+        );
+        return http.build();
         
-        request.anyRequest().authenticated();
-    });
-
-    http.formLogin(form -> form
-            .loginPage("/login")
-            .loginProcessingUrl("/login") // Este POST debe coincidir con el th:action del HTML
-            .defaultSuccessUrl("/", true)
-            .failureUrl("/login?error=true")
-            .permitAll()
-    );
-
-    // Desactiva CSRF momentáneamente solo para probar si este es el bloqueo
-    http.csrf(csrf -> csrf.disable()); 
-
-    return http.build();
-}
+    }
     
     @Bean
     PasswordEncoder passwordEncoder() {

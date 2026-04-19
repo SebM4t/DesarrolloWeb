@@ -1,9 +1,9 @@
 package com.DesarrolloWeb.demo.service;
 
 import com.DesarrolloWeb.demo.domain.Categoria;
-import com.DesarrolloWeb.demo.repository.CategoriaRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import com.DesarrolloWeb.demo.repository.CategoriaRepository;
 
 @Service
 public class CategoriaService {

@@ -2,10 +2,10 @@ package com.DesarrolloWeb.demo.controller;
 
 import com.DesarrolloWeb.demo.domain.Placa;
 import com.DesarrolloWeb.demo.repository.PlacaRepository;
+import com.DesarrolloWeb.demo.service.CategoriaService;
 import com.DesarrolloWeb.demo.service.PlacaService;
 import java.util.Locale;
 import jakarta.validation.Valid;
-import java.util.Optional;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,58 +13,84 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
 @Controller
-@RequestMapping("/placa") // Cambiamos la ruta base
+@RequestMapping("/placa")
 public class PlacaController {
 
     private final PlacaService placaService;
+    private final CategoriaService categoriaService;
     private final MessageSource messageSource;
 
-    public PlacaController(PlacaService placaService, MessageSource messageSource) {
+    public PlacaController(PlacaService placaService, CategoriaService categoriaService, MessageSource messageSource) {
         this.placaService = placaService;
+        this.categoriaService = categoriaService;
         this.messageSource = messageSource;
     }
-    
 
     @GetMapping("/listado")
     public String listado(Model model) {
-        var placas = placaService.listarDisponibles(); // Ajusta según tu método
+        var placas = placaService.listarTodas();
         model.addAttribute("placas", placas);
         model.addAttribute("totalPlacas", placas.size());
-        return "placa/listado"; // Asegúrate de tener este archivo en /templates/placa/listado.html
+        model.addAttribute("categorias", categoriaService.listarTodas());
+        model.addAttribute("placa", new Placa());
+
+        return "placa/listado";
     }
 
     @PostMapping("/guardar")
-    public String guardar(@Valid Placa placa, @RequestParam MultipartFile imagenFile, RedirectAttributes redirectAttributes) {
-        placaService.save(placa, imagenFile); // Asumiendo que tu servicio acepta estos parámetros
-        redirectAttributes.addFlashAttribute("todoOk", messageSource.getMessage("mensaje.actualizado", null, Locale.getDefault()));
+    public String guardar(@Valid Placa placa,
+            @RequestParam MultipartFile imagenFile,
+            RedirectAttributes redirectAttributes) {
+
+        placaService.save(placa, imagenFile);
+        redirectAttributes.addFlashAttribute("todoOk",
+                messageSource.getMessage("mensaje.actualizado", null, Locale.getDefault()));
         return "redirect:/placa/listado";
     }
 
     @PostMapping("/eliminar")
-    public String eliminar(@RequestParam Integer idPlaca, RedirectAttributes redirectAttributes) { 
+    public String eliminar(@RequestParam Integer idPlaca, RedirectAttributes redirectAttributes) {
         String titulo = "todoOk";
         String detalle = "mensaje.eliminado";
         try {
             placaService.eliminar(idPlaca);
         } catch (Exception e) {
             titulo = "error";
-            detalle = "placa.error"; // Asegúrate de tener este mensaje en tu archivo messages.properties
+            detalle = "placa.error";
         }
-        redirectAttributes.addFlashAttribute(titulo, messageSource.getMessage(detalle, null, Locale.getDefault()));
+        redirectAttributes.addFlashAttribute(titulo,
+                messageSource.getMessage(detalle, null, Locale.getDefault()));
         return "redirect:/placa/listado";
     }
 
     @GetMapping("/modificar/{idPlaca}")
-    public String modificar(@PathVariable("idPlaca") Integer idPlaca, Model model, RedirectAttributes redirectAttributes) {
-        Placa placa = placaService.buscarPorId(idPlaca); // Ajusta según tu servicio
+    public String modificar(@PathVariable("idPlaca") Integer idPlaca, Model model) {
+        Placa placa = placaService.buscarPorId(idPlaca);
+        model.addAttribute("placa", placa);
+        model.addAttribute("categorias", categoriaService.listarTodas());
+        return "catalogo/modifica"; 
+    }
+
+    @GetMapping("/catalogo")
+    public String mostrarCatalogo(Model model) {
+        model.addAttribute("placas", placaService.listarPorCategoria(1));
+        model.addAttribute("trofeos", placaService.listarPorCategoria(2));
+        model.addAttribute("categorias", categoriaService.listarTodas());
+        model.addAttribute("placa", new Placa()); 
+
+        return "catalogo/listado";
+    }
+
+    @GetMapping("/detalle/{idPlaca}")
+    public String detalle(@PathVariable("idPlaca") Integer idPlaca, Model model) {
+        Placa placa = placaService.buscarPorId(idPlaca);
         if (placa == null) {
-            redirectAttributes.addFlashAttribute("error", messageSource.getMessage("placa.noEncontrada", null, Locale.getDefault()));
-            return "redirect:/placa/listado";
+            return "redirect:/placa/catalogo";
         }
         model.addAttribute("placa", placa);
-        return "placa/modifica"; // Asegúrate de tener este archivo en /templates/placa/modifica.html
+        return "catalogo/detalle";
     }
+    
 
 }

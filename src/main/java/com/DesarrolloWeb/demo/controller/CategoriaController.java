@@ -1,72 +1,81 @@
 package com.DesarrolloWeb.demo.controller;
 
-import com.DesarrolloWeb.demo.domain.Placa;
 import com.DesarrolloWeb.demo.domain.Categoria;
-import com.DesarrolloWeb.demo.service.PlacaService;
 import com.DesarrolloWeb.demo.service.CategoriaService;
+import jakarta.validation.Valid;
+import java.util.Locale;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/catalogo")
+@RequestMapping("/categoria")
 public class CategoriaController {
 
-    private final PlacaService placaService;
     private final CategoriaService categoriaService;
+    private final MessageSource messageSource;
 
-    public CategoriaController(PlacaService placaService, CategoriaService categoriaService) {
-        this.placaService = placaService;
+    public CategoriaController(CategoriaService categoriaService, MessageSource messageSource) {
         this.categoriaService = categoriaService;
+        this.messageSource = messageSource;
     }
 
-// Lista completa del catálogo
-    @GetMapping
-    public String catalogo(
-            @RequestParam(required = false) Integer idCategoria,
-            @RequestParam(required = false) String material,
-            Model model) {
-
-        List<Placa> listaCompleta;
-        List<Categoria> categorias = categoriaService.listarTodas();
-
-        if (idCategoria != null) {
-            listaCompleta = placaService.listarPorCategoria(idCategoria);
-        } else if (material != null && !material.isEmpty()) {
-            listaCompleta = placaService.listarPorMaterial(material);
-        } else {
-            listaCompleta = placaService.listarDisponibles();
-        }
-
-        List<Placa> placas = listaCompleta.stream()
-                .filter(p -> p.getCategoria() != null && "Placas Conmemorativas".equalsIgnoreCase(p.getCategoria().getNombre()))
-                .toList();
-
-        List<Placa> trofeos = listaCompleta.stream()
-                .filter(p -> p.getCategoria() != null && "Trofeos y Reconocimientos".equalsIgnoreCase(p.getCategoria().getNombre()))
-                .toList();
-
-        model.addAttribute("placas", placas);
-        model.addAttribute("trofeos", trofeos);
+    @GetMapping("/listado")
+    public String listado(Model model) {
+        var categorias = categoriaService.listarTodas();
         model.addAttribute("categorias", categorias);
-        model.addAttribute("categoriaSeleccionada", idCategoria);
-        model.addAttribute("materialSeleccionado", material);
-
-        return "catalogo/listado";
+        model.addAttribute("totalCategorias", categorias.size());
+        return "/categoria/listado";
     }
 
-    @GetMapping("/{idPlaca}")
-    public String detalle(@PathVariable Integer idPlaca, Model model) {
-        Placa placa = placaService.buscarPorId(idPlaca);
-        if (placa == null) {
-            return "redirect:/catalogo";
+    @PostMapping("/guardar")
+    public String guardar(@Valid Categoria categoria, RedirectAttributes redirectAttributes) {
+        // Nota: Si no usas imágenes aún, eliminamos el MultipartFile para que no falle
+        categoriaService.guardar(categoria);
+        
+        // Mensaje de éxito usando tu MessageSource
+        redirectAttributes.addFlashAttribute("todoOk", 
+            messageSource.getMessage("mensaje.actualizado", null, Locale.getDefault()));
+
+        return "redirect:/categoria/listado";
+    }
+
+    // Eliminar con manejo de excepciones (muy robusto)
+    @PostMapping("/eliminar")
+    public String eliminar(@RequestParam Integer idCategoria, RedirectAttributes redirectAttributes) {
+        String titulo = "todoOk";
+        String detalle = "mensaje.eliminado";
+        
+        try {
+            categoriaService.eliminar(idCategoria);
+        } catch (Exception e) {
+            // Si tiene placas asociadas o no existe, lanzará error
+            titulo = "error";
+            detalle = "categoria.error03"; // Ajusta según tus properties
         }
-        model.addAttribute("placa", placa);
-        return "catalogo/detalle";
+        
+        redirectAttributes.addFlashAttribute(titulo, 
+            messageSource.getMessage(detalle, null, Locale.getDefault()));
+        
+        return "redirect:/categoria/listado";
     }
 
+    // Modificar: Carga los datos en el formulario
+    @GetMapping("/modificar/{idCategoria}")
+    public String modificar(@PathVariable("idCategoria") Integer idCategoria, Model model, RedirectAttributes redirectAttributes) {
+        var categoria = categoriaService.buscarPorId(idCategoria);
+        
+        if (categoria == null) {
+            redirectAttributes.addFlashAttribute("error", 
+                messageSource.getMessage("categoria.error01", null, Locale.getDefault()));
+            return "redirect:/categoria/listado";
+        }
+        
+        model.addAttribute("categoria", categoria);
+        return "/categoria/modifica"; // Esta es la página con el formulario
+    }
+    
+    
 }
