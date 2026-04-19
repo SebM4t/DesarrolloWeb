@@ -67,73 +67,79 @@
             </div>
         </section>
 
-        <section th:fragment="catalogoProducto">
-            <div class="container mt-4">
-                <h2 class="mb-5 fw-bold text-center">Catálogo de Productos</h2>
+<section th:fragment="catalogoProducto">
+    <div class="container mt-4">
 
+        <div class="row">
+            <div class="col-md-7">
+                <h4 class="text-center mb-3">Placas Conmemorativas</h4>
                 <div class="row">
-                    <div class="col-md-8">
-                        <h4 class="text-center mb-3">Placas Conmemorativas</h4>
-                        <div class="row">
-                            <div class="col-6 mb-4" th:each="p : ${placas}">
-                                <div class="card h-100 shadow-sm border-0">
-                                    <div class="card-img-top bg-light text-center p-2">
-                                        <img th:src="${p.imagenNombre != null && !p.imagenNombre.isEmpty() ? p.imagenNombre : 'https://placehold.co/400x300?text=Sin+Imagen'}" 
-                                             height="120" class="img-fluid rounded"/>
-                                    </div>
-                                    <div class="card-body">
-                                        <h6 class="card-title fw-bold" th:text="${p.nombre}">Nombre</h6>
-                                        <p class="card-text small text-muted" th:text="${p.material}">Material</p>
-                                    </div>
-                                    <div class="card-footer bg-white border-0">
-                                        <a th:href="@{'/placa/detalle/' + ${p.idPlaca}}" class="btn btn-sm btn-outline-dark w-100 mb-2">Ver detalle</a>
-
-                                        <div class="d-flex justify-content-between gap-2 mt-2" sec:authorize="hasAuthority('ADMIN')">
-                                            <a th:href="@{'/placa/modificar/' + ${p.idPlaca}}" 
-                                               class="btn btn-warning btn-sm flex-fill d-flex align-items-center justify-content-center py-2">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-
-                                            <button type="button" class="btn btn-sm btn-danger w-50"
-                                                    data-bs-toggle="modal" 
-                                                    data-bs-target="#confirmModal"
-                                                    th:data-bs-id="${p.idPlaca}"
-                                                    th:data-bs-descripcion="${p.nombre}">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                    <div class="col-4 mb-4" th:each="p : ${placas}">
+                        <div class="card h-100 shadow-sm border-0">
+                            <div class="card-img-top bg-light text-center p-2">
+                                <img th:src="${p.imagenNombre != null && !p.imagenNombre.isEmpty() ? p.imagenNombre : 'https://placehold.co/400x300?text=Sin+Imagen'}" 
+                                     height="120" class="img-fluid rounded"/>
                             </div>
-                        </div>
-                    </div>
+                            <div class="card-body">
+                                <h6 class="card-title fw-bold" th:text="${p.nombre}">Nombre</h6>
+                                <p class="card-text small text-muted" th:text="${p.material}">Material</p>
+                                <span class="text-success fw-bold">₡[[${#numbers.formatInteger(p.precio, 0, 'POINT')}]]</span>
+                            </div>
+                            <div class="card-footer bg-white border-0">
+                                <a th:href="@{'/placa/detalle/' + ${p.idPlaca}}" class="btn btn-sm btn-outline-dark w-100 mb-2">Ver detalle</a>
 
-                    <div class="col-md-4">
-                        <h4 class="text-center mb-3">Trofeos</h4>
-                        <div class="row">
-                            <div class="col-12 mb-4" th:each="trofeo : ${trofeos}">
-                                <div class="card h-100 shadow-sm">
-                                    <div class="card-body text-center">
-                                        <h6 class="fw-bold" th:text="${trofeo.nombre}">Nombre</h6>
-                                        <p class="small text-muted" th:text="${trofeo.material}"></p>
-
-                                        <div class="d-flex justify-content-center gap-2 mt-2" sec:authorize="hasAuthority('ADMIN')">
-                                            <a th:href="@{'/placa/modificar/' + ${trofeo.idPlaca}}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
-                                            <button class="btn btn-sm btn-danger" 
-                                                    data-bs-toggle="modal" data-bs-target="#confirmModal"
-                                                    th:data-bs-id="${trofeo.idPlaca}" th:data-bs-nombre="${trofeo.nombre}">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </div>
+                               
+                                <div class="d-flex justify-content-center gap-1 mt-1" sec:authorize="hasAuthority('ADMIN')">
+                                    <a th:href="@{'/placa/modificar/' + ${p.idPlaca}}" class="btn btn-warning btn-sm py-0 px-2">
+                                        <i class="fas fa-edit fa-xs"></i>
+                                    </a>
+                                    <button class="btn btn-danger btn-sm py-0 px-2"
+                                            data-bs-toggle="modal" data-bs-target="#confirmModal"
+                                            th:data-bs-id="${p.idPlaca}"
+                                            th:data-bs-descripcion="${p.nombre}">
+                                        <i class="fa-solid fa-trash fa-xs"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div th:replace="~{catalogo/fragmentos :: confirmarEliminar}"></div>
-        </section>
+            <div class="col-md-4 border-start">
+                <h4 class="text-center mb-3">Reconocimientos</h4>
+                <div class="row row-cols-2 g-2"> 
+                    <div class="col mb-3" th:each="trofeo : ${trofeos}">
+                        <div class="card h-100 shadow-sm border-0">
+                            <div class="p-2 bg-light d-flex justify-content-center align-items-center" style="height: 120px;">
+                                <img th:src="${trofeo.imagenNombre}" 
+                                     class="img-fluid rounded" 
+                                     style="max-height: 100%; object-fit: contain;">
+                            </div>
+                            <div class="card-body text-center p-2">
+                                <h6 class="fw-bold mb-0" style="font-size: 0.85rem;" th:text="${trofeo.nombre}">Nombre</h6>
+                                <p class="text-muted mb-1" style="font-size: 0.75rem;" th:text="${trofeo.material}"></p>
+                                <span class="text-success fw-bold">₡[[${#numbers.formatInteger(trofeo.precio, 0, 'POINT')}]]</span>
+                                <a th:href="@{'/placa/detalle/' + ${trofeo.idPlaca}}" class="btn btn-sm btn-outline-dark w-100 mb-2">Ver detalle</a>
+                                <div class="d-flex justify-content-center gap-1 mt-1" sec:authorize="hasAuthority('ADMIN')">
+                                    <a th:href="@{'/placa/modificar/' + ${trofeo.idPlaca}}" class="btn btn-sm btn-warning py-0 px-1">
+                                        <i class="fas fa-edit fa-xs"></i>
+                                    </a>
+                                    <button class="btn btn-sm btn-danger py-0 px-1" 
+                                            data-bs-toggle="modal" data-bs-target="#confirmModal"
+                                            th:data-bs-id="${trofeo.idPlaca}" 
+                                            th:data-bs-nombre="${trofeo.nombre}">
+                                        <i class="fas fa-trash fa-xs"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="~{catalogo/fragmentos :: confirmarEliminar}"></div>
+</section>
 
         <section th:fragment="modifica">
             <div class="container py-5">
@@ -230,5 +236,3 @@
                 </div>
             </div>
         </section>
-
-    </body>

@@ -32,17 +32,13 @@ public class CategoriaController {
 
     @PostMapping("/guardar")
     public String guardar(@Valid Categoria categoria, RedirectAttributes redirectAttributes) {
-        // Nota: Si no usas imágenes aún, eliminamos el MultipartFile para que no falle
         categoriaService.guardar(categoria);
-        
-        // Mensaje de éxito usando tu MessageSource
         redirectAttributes.addFlashAttribute("todoOk", 
             messageSource.getMessage("mensaje.actualizado", null, Locale.getDefault()));
 
         return "redirect:/categoria/listado";
     }
 
-    // Eliminar con manejo de excepciones (muy robusto)
     @PostMapping("/eliminar")
     public String eliminar(@RequestParam Integer idCategoria, RedirectAttributes redirectAttributes) {
         String titulo = "todoOk";
@@ -51,9 +47,8 @@ public class CategoriaController {
         try {
             categoriaService.eliminar(idCategoria);
         } catch (Exception e) {
-            // Si tiene placas asociadas o no existe, lanzará error
             titulo = "error";
-            detalle = "categoria.error03"; // Ajusta según tus properties
+            detalle = "categoria.error03"; 
         }
         
         redirectAttributes.addFlashAttribute(titulo, 
@@ -62,7 +57,6 @@ public class CategoriaController {
         return "redirect:/categoria/listado";
     }
 
-    // Modificar: Carga los datos en el formulario
     @GetMapping("/modificar/{idCategoria}")
     public String modificar(@PathVariable("idCategoria") Integer idCategoria, Model model, RedirectAttributes redirectAttributes) {
         var categoria = categoriaService.buscarPorId(idCategoria);
@@ -74,7 +68,7 @@ public class CategoriaController {
         }
         
         model.addAttribute("categoria", categoria);
-        return "/categoria/modifica"; // Esta es la página con el formulario
+        return "/categoria/modifica"; 
     }
     
     

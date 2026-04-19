@@ -1,84 +1,194 @@
+
+
 <section th:fragment="galeria" class="container-fluid mt-4">
-            <div class="row">
-                
-                <div class="col-md-8 px-4">
-                    <h2 class="fw-bold mb-4" style="border-left: 5px solid #E2B844; padding-left: 15px;">
-                        NUESTROS TRABAJOS
-                    </h2>
+    <div class="row">
+        <div class="col-md-8 px-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold mb-0" style="border-left: 5px solid #E2B844; padding-left: 15px;">NUESTROS TRABAJOS</h2>
+                <button sec:authorize="hasAuthority('ADMIN')" type="button" 
+                        class="btn btn-warning fw-bold shadow-sm" 
+                        data-bs-toggle="modal" data-bs-target="#modalAgregarGaleria">
+                    <i class="fas fa-plus"></i> Nueva Placa
+                </button>
+            </div>
 
-                    <div class="row mb-4 g-3">
-                        <div class="col-md-6">
-                            <form method="post" th:action='@{/galeria/query1}' class='card shadow-sm border-0'>
-                                <div class='card-header text-center text-dark fw-bold' style="background-color: #E2B844">
-                                    FILTRAR POR PRECIO
-                                </div>
-                                <div class='card-body row g-2'>
-                                    <div class="col-6 text-center">
-                                        <label class="small fw-bold">Mínimo</label>
-                                        <input type='number' name='precioInf' th:value='${precioInf}' class='form-control form-control-sm' required/>
-                                    </div>
-                                    <div class="col-6 text-center">
-                                        <label class="small fw-bold">Máximo</label>
-                                        <input type='number' name='precioSup' th:value='${precioSup}' class='form-control form-control-sm' required/>
-                                    </div>
-                                    <button type="submit" class="btn btn-dark btn-sm mt-2">Buscar Rango</button>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="col-md-6">
-                            <form method="post" th:action='@{/galeria/query2}' class='card shadow-sm border-0'>
-                                <div class='card-header text-center text-dark fw-bold' style="background-color: #E2B844">
-                                    BUSCAR POR NOMBRE
-                                </div>
-                                <div class='card-body p-4'>
-                                    <div class="input-group">
-                                        <input type='text' name='nombre' class='form-control' placeholder="Ej: Mármol..."/>
-                                        <button type="submit" class="btn btn-dark"><i class="fas fa-search"></i></button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+            <div class="row mb-4 g-3">
+                <div class="col-md-5">
+                    <div th:replace="~{:: formConsultaPrecio}"/>
+                </div>
+                <div class="col-md-5">
+                    <div th:replace="~{:: formConsultaNombre}"/>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <a th:href="@{/galeria/listado}" class="btn btn-outline-secondary w-100 mb-2" title="Limpiar Filtros">
+                        <i class="fas fa-sync-alt"></i>
+                    </a>
+                </div>
+            </div>
 
-                    <div class="row row-cols-1 row-cols-md-3 g-4">
-                        <div class="col" th:each="p : ${placas}">
-                            <div class="card h-100 shadow-sm border-0">
-                                <div class="p-2 bg-light d-flex justify-content-center align-items-center" style="height: 180px;">
-                                    <img th:src="${p.imagenNombre}" class="img-fluid rounded" style="max-height: 100%; object-fit: contain;">
-                                </div>
-                                <div class="card-body text-center">
-                                    <h6 class="fw-bold text-uppercase" th:text="${p.nombre}"></h6>
-                                    <p class="text-muted small mb-1" th:text="${p.material}"></p>
-                                    <span class="text-success fw-bold">₡[[${#numbers.formatInteger(p.precio, 0, 'POINT')}]]</span>
-                                </div>
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                <div class="col" th:each="p : ${placas}">
+                    <div class="card h-100 shadow-sm border-0 text-center">
+                        <div class="p-2 bg-light d-flex justify-content-center align-items-center" style="height: 180px;">
+                            <img th:src="${p.imagenNombre}" class="img-fluid rounded" style="max-height: 100%; object-fit: contain;">
+                        </div>
+                        <div class="card-body">
+                            <h6 class="fw-bold text-uppercase" th:text="${p.nombre}"></h6>
+                            <p class="text-muted small mb-1" th:text="${p.material}"></p>
+                        </div>
+                        <div class="card-footer bg-white border-0 pb-3" sec:authorize="hasAuthority('ADMIN')">
+                            <div class="d-flex justify-content-center gap-2">
+                                <a th:href="@{'/galeria/modificar/' + ${p.idPlaca}}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                                <button type="button" class="btn btn-sm btn-danger" 
+                                        data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal"
+                                        th:data-bs-id="${p.idPlaca}" 
+                                        th:data-bs-descripcion="${p.nombre}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-md-4 border-start">
-                    <div class="p-3 rounded text-center mb-4" style="background-color: #E2B844">
-                        <h4 class="fw-bold mb-0 text-dark">COMENTARIOS</h4>
-                    </div>
-                    <div class="d-flex flex-column gap-3">
-                        <div class="card border-0 shadow-sm p-3 text-center" style="background-color: #fcebb6;">
-                            <h6 class="fw-bold mb-1">USUARIO 1</h6>
-                            <p class="small mb-0">"La placa quedó impecable, un acabado muy profesional."</p>
-                        </div>
-                        <div class="card border-0 shadow-sm p-3 text-center" style="background-color: #fcebb6;">
-                            <h6 class="fw-bold mb-1">USUARIO 4</h6>
-                            <p class="small mb-0">"Entrega puntual y diseño excepcional. Muy recomendados."</p>
-                        </div>
-                        <div class="card border-0 shadow-sm p-3 text-center" style="background-color: #fcebb6;">
-                            <h6 class="fw-bold mb-1">USUARIO 23</h6>
-                            <p class="small mb-0">"El diseño personalizado captó justo lo que queríamos."</p>
-                        </div>
-                        <div class="card border-0 shadow-sm p-3 text-center" style="background-color: #fcebb6;">
-                            <h6 class="fw-bold mb-1">USUARIO 12</h6>
-                            <p class="small mb-0">"Excelente material, se nota la calidad en el grabado."</p>
-                        </div>
-                    </div>
-                </div>
-
             </div>
-        </section>
+        </div>
+
+        <div class="col-md-4 border-start">
+            <div class="p-3 rounded text-center mb-4" style="background-color: #E2B844">
+                <h4 class="fw-bold mb-0 text-dark">COMENTARIOS</h4>
+            </div>
+            <div class="d-flex flex-column gap-3">
+                <div th:replace="~{:: bloqueComentario('USUARIO 1', 'Excelente servicio.')}"/>
+                <div th:replace="~{:: bloqueComentario('USUARIO 4', 'Entrega puntual y diseño excepcional.')}"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalAgregarGaleria" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form th:action="@{/galeria/guardar}" method="POST" enctype="multipart/form-data">
+                    <div class="modal-header bg-dark text-white"><h5>Nueva Placa</h5></div>
+                    <div class="modal-body">
+                        <div class="mb-3"><label class="fw-bold">Nombre</label><input type="text" name="nombre" class="form-control" required/></div>
+                        <div class="mb-3"><label class="fw-bold">Material</label><input type="text" name="material" class="form-control" required/></div>
+                        <div class="mb-3"><label class="fw-bold">Precio</label><input type="number" name="precio" class="form-control" required/></div>
+                        <div class="mb-3">
+                            <label class="fw-bold">Categoría</label>
+                            <select name="categoria.idCategoria" class="form-select">
+                                <option th:each="c : ${categorias}" th:value="${c.idCategoria}" th:text="${c.descripcion}"></option>
+                            </select>
+                        </div>
+                        <div class="mb-3"><label class="fw-bold">Imagen</label><input type="file" name="imagenFile" class="form-control"/></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-warning">Guardar en Galería</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmarEliminarModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form th:action="@{/galeria/eliminar}" method="POST">
+                    <input type="hidden" name="idPlaca" id="idPlacaEliminar"/>
+                    <div class="modal-header bg-danger text-white"><h5>Eliminar Placa</h5></div>
+                    <div class="modal-body text-center">
+                        <p>¿Estás seguro de eliminar esta placa?</p>
+                        <h4 id="nombrePlacaEliminar" class="fw-bold"></h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger">Confirmar Eliminación</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section th:fragment="modificaGaleria">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <form th:action="@{/galeria/guardar}" 
+                      method="POST" 
+                      th:object="${placa}" 
+                      enctype="multipart/form-data" 
+                      class="card shadow p-4">
+
+                    <input type="hidden" name="idPlaca" th:field="*{idPlaca}"/>
+                    <input type="hidden" name="imagenNombre" th:field="*{imagenNombre}"/>
+
+                    <h3 class="fw-bold mb-4 text-center">Editar Placa de Galería</h3>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nombre de la Placa</label>
+                        <input type="text" class="form-control" th:field="*{nombre}" required/>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Material</label>
+                        <input type="text" class="form-control" th:field="*{material}" required/>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Precio</label>
+                            <input type="number" class="form-control" th:field="*{precio}" required/>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Categoría</label>
+                            <select th:field="*{categoria.idCategoria}" class="form-select">
+                                <option th:each="c : ${categorias}" th:value="${c.idCategoria}" th:text="${c.descripcion}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 text-center" th:if="${placa.imagenNombre != null}">
+                        <p class="fw-bold mb-1">Imagen Actual:</p>
+                        <img th:src="${placa.imagenNombre}" class="img-thumbnail" style="max-height: 150px;">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Cambiar Imagen</label>
+                        <input type="file" name="imagenFile" class="form-control" onchange="readURL(this);"/>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger fw-bold">Actualizar y Volver a Galería</button>
+                        <a th:href="@{/galeria/listado}" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:fragment="formConsultaPrecio">
+    <form method="post" th:action="@{/galeria/query1}" class="card shadow-sm border-0">
+        <div class="card-header text-center text-dark fw-bold small" style="background-color: #E2B844">FILTRAR PRECIO</div>
+        <div class="card-body p-2 row g-1">
+            <div class="col-6"><input type="number" name="precioInf" th:value="${precioInf}" class="form-control form-control-sm" placeholder="Mín"/></div>
+            <div class="col-6"><input type="number" name="precioSup" th:value="${precioSup}" class="form-control form-control-sm" placeholder="Máx"/></div>
+            <button type="submit" class="btn btn-dark btn-sm mt-2 w-100">Buscar</button>
+        </div>
+    </form>
+</div>
+
+<div th:fragment="formConsultaNombre">
+    <form method="post" th:action="@{/galeria/query2}" class="card shadow-sm border-0">
+        <div class="card-header text-center text-dark fw-bold small" style="background-color: #E2B844">BUSCAR NOMBRE</div>
+        <div class="card-body p-2">
+            <div class="input-group">
+                <input type="text" name="nombre" class="form-control form-control-sm" placeholder="Ej: Mármol..."/>
+                <button type="submit" class="btn btn-dark btn-sm"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div th:fragment="bloqueComentario(usuario, texto)" class="card border-0 shadow-sm p-3 text-center mb-3" style="background-color: #fcebb6;">
+    <h6 class="fw-bold mb-1" th:text="${usuario}"></h6>
+    <p class="small mb-0" th:text="${texto}"></p>
+</div>
