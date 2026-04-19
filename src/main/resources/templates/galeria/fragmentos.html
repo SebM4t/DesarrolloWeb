@@ -81,7 +81,7 @@
                         <div class="mb-3"><label class="fw-bold">Imagen</label><input type="file" name="imagenFile" class="form-control"/></div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-warning">Guardar en Galería</button>
+                        <button type="submit" class="btn btn-success">Guardar en Galería</button>
                     </div>
                 </form>
             </div>
@@ -131,6 +131,16 @@
                         <label class="form-label fw-bold">Material</label>
                         <input type="text" class="form-control" th:field="*{material}" required/>
                     </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Descripción</label>
+                        <input type="text" class="form-control" th:field="*{descripcion}" required/>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Tamaño</label>
+                        <input type="text" class="form-control" th:field="*{tamanio}" required/>
+                    </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
@@ -156,7 +166,7 @@
                     </div>
 
                     <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-danger fw-bold">Actualizar y Volver a Galería</button>
+                        <button type="submit" class="btn btn-success fw-bold">Actualizar y Volver a Galería</button>
                         <a th:href="@{/galeria/listado}" class="btn btn-outline-secondary">Cancelar</a>
                     </div>
                 </form>

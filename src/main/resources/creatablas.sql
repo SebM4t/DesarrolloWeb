@@ -70,6 +70,18 @@ CREATE TABLE ruta (
     CHECK (id_rol IS NOT NULL OR requiere_rol = FALSE)
 );
 
+CREATE TABLE material (
+    id_material INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    precio DECIMAL(10,2) NOT NULL
+);
+
+CREATE TABLE tamanio (
+    id_tamanio INT AUTO_INCREMENT PRIMARY KEY,
+    dimensiones VARCHAR(50) NOT NULL,  -- Ej: "20x30 cm"
+    precio_adicional DECIMAL(10,2) NOT NULL DEFAULT 0
+);
+
 INSERT INTO categoria (id_categoria, nombre, descripcion) VALUES  
 (1, 'Placas Conmemorativas', 'Placas para homenajes y recuerdos'),
 (2, 'Trofeos y Reconocimientos', 'Trofeos para premiaciones y logros'),
@@ -141,7 +153,9 @@ INSERT INTO ruta (ruta, requiere_rol) VALUES
 ('/mascotas/**', false),
 ('/funciones/**', false),
 ('/faq/**', false),
-('/soporte/**', false);
+('/soporte/**', false),
+('/material/**',false),
+('/tamanio/**',false);
 
 INSERT INTO ruta (ruta,requiere_rol) VALUES 
 ('/',false),
@@ -155,9 +169,48 @@ INSERT INTO ruta (ruta,requiere_rol) VALUES
 ('/css/**',false),
 ('/webjars/**',false);
 
+INSERT INTO material (nombre, precio) VALUES
+('Mármol Blanco',        40000.00),
+('Mármol Negro',         45000.00),
+('Granito Gris',         35000.00),
+('Granito Negro',        38000.00),
+('Cerámica Estándar',    25000.00),
+('Foto Cerámica',        35000.00),
+('Aluminio Pulido',      22000.00),
+('Aluminio Fundido',     30000.00),
+('Aluminio Anodizado',   28000.00),
+('Acrílico Transparente',20000.00),
+('Acrílico Negro',       22000.00),
+('Bronce',               55000.00);
+
+
+INSERT INTO tamanio (dimensiones, precio_adicional) VALUES
+('10x15 cm',   0.00),
+('15x20 cm',   3000.00),
+('20x30 cm',   6000.00),
+('25x35 cm',   9000.00),
+('30x40 cm',   13000.00),
+('40x50 cm',   18000.00),
+('50x60 cm',   24000.00),
+('60x80 cm',   32000.00),
+('80x100 cm',  45000.00),
+('15x15 cm',   3000.00),
+('20x20 cm',   5000.00),
+('30x30 cm',   10000.00),
+('40x40 cm',   16000.00),
+('50x50 cm',   22000.00),
+('10x30 cm',   4000.00),
+('15x40 cm',   7000.00),
+('20x60 cm',   14000.00),
+('30x90 cm',   28000.00);
+
 
 -- Consultas finales
 SELECT * FROM usuario;
 
 select * from placa;
 UPDATE placa SET id_categoria = 1, disponible = 1 WHERE id_categoria IS NULL;
+
+SELECT id_placa, nombre, disponible, id_categoria FROM placa;
+
+SELECT * FROM material;
