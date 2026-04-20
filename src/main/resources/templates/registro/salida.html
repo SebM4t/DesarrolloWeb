@@ -1,16 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
-
+<!-- Esta es la página principal del sitio web TechShop -->
+<html>
     <head th:replace="~{general/fragmentos :: head}"/>
 
     <body>
-
         <header th:replace="~{general/fragmentos :: header}"/>
-
-        <div th:replace="~{cuenta/fragmentos :: registroForm}"></div>
+        
+        <section th:replace="~{registro/fragmentos :: salidaRegistro}"/>
 
         <footer th:replace="~{general/fragmentos :: footer}"/>
-
     </body>
 </html>

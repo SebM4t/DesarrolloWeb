@@ -1,6 +1,5 @@
 package com.DesarrolloWeb.demo.service;
 
-
 import com.DesarrolloWeb.demo.domain.Rol;
 import com.DesarrolloWeb.demo.domain.Usuario;
 import com.DesarrolloWeb.demo.repository.RolRepository;
@@ -70,18 +69,19 @@ public class UsuarioService {
 
     @Transactional
     public void save(Usuario usuario, MultipartFile imagenFile, boolean encriptaClave) {
-        // Verificar si el correo ya existe, excluyendo el usuario actual        
-        final Integer idUser = usuario.getIdUsuario();        
-        Optional<Usuario> usuarioDuplicado = usuarioRepository.findByUsernameOrCorreo(null, usuario.getCorreo());
+        final Integer idUser = usuario.getIdUsuario();
+
+        Optional<Usuario> usuarioDuplicado = usuarioRepository.findByUsernameOrCorreo(
+                usuario.getUsername(), usuario.getCorreo());
+
         if (usuarioDuplicado.isPresent()) {
             Usuario encontrado = usuarioDuplicado.get();
 
-            // Verifica si estamos en modo CREACIÓN (idUser == null) O si el ID encontrado NO es el mismo que estamos actualizando
             if (idUser == null || !encontrado.getIdUsuario().equals(idUser)) {
-                throw new DataIntegrityViolationException("El correo ya está en uso por otro usuario.");
+                throw new DataIntegrityViolationException("El usuario o correo ya está en uso.");
             }
         }
-        
+
         //Se valida si la clave se va actualizar o si es un usuario nuevo se debe actualizar...
         var asignarRol = false;
         if (usuario.getIdUsuario() == null) {
@@ -89,7 +89,7 @@ public class UsuarioService {
                 throw new IllegalArgumentException("La contraseña es obligatoria para nuevos usuarios.");
             }
             //La primera vez como es activación no se encripta...
-            usuario.setPassword(encriptaClave?passwordEncoder.encode(usuario.getPassword()):usuario.getPassword());
+            usuario.setPassword(encriptaClave ? passwordEncoder.encode(usuario.getPassword()) : usuario.getPassword());
             asignarRol = true;
         } else {
             if (usuario.getPassword() == null || usuario.getPassword().isBlank()) {
@@ -99,11 +99,11 @@ public class UsuarioService {
                         .orElseThrow(() -> new IllegalArgumentException("Usuario a modificar no encontrado."));
 
                 // Asignamos la contraseña existente al objeto "usuario" antes de guardarlo.                
-                usuario.setPassword(encriptaClave?passwordEncoder.encode(usuarioExistente.getPassword()):usuarioExistente.getPassword());
+                usuario.setPassword(usuarioExistente.getPassword());
             } else {
                 // El campo de password NO está vacío (se desea actualizar).
                 // Se encripta y se guarda la nueva contraseña.
-                usuario.setPassword(encriptaClave?passwordEncoder.encode(usuario.getPassword()):usuario.getPassword());                
+                usuario.setPassword(encriptaClave ? passwordEncoder.encode(usuario.getPassword()) : usuario.getPassword());
             }
         }
         usuario = usuarioRepository.save(usuario);
@@ -154,9 +154,8 @@ public class UsuarioService {
         usuario.getRoles().add(rol);
         return usuarioRepository.save(usuario);
     }
-    
-        //Sección para gestionar roles a usuarios...
-    
+
+    //Sección para gestionar roles a usuarios...
     @Transactional(readOnly = true)
     public List<String> getRolesNombres() {
         // Retorna una lista de Strings con el nombre de cada rol
@@ -180,5 +179,3 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 }
-    
-
