@@ -287,4 +287,4 @@ SELECT id_placa, nombre, disponible, id_categoria FROM placa;
 SELECT * FROM material;
 
 SELECT nombre, imagen_nombre FROM placa;
-
+SELECT * FROM material;

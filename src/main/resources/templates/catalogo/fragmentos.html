@@ -87,8 +87,6 @@
                             </div>
                             <div class="card-footer bg-white border-0">
                                 <a th:href="@{'/placa/detalle/' + ${p.idPlaca}}" class="btn btn-sm btn-outline-dark w-100 mb-2">Ver detalle</a>
-
-
                                 <div class="d-flex justify-content-center gap-1 mt-1" sec:authorize="hasRole('ADMIN')">
                                     <a th:href="@{'/placa/modificar/' + ${p.idPlaca}}" class="btn btn-warning btn-sm py-0 px-2">
                                         <i class="fas fa-edit fa-xs"></i>
