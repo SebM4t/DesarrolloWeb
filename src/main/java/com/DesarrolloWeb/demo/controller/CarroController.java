@@ -46,27 +46,21 @@ public class CarroController {
         return "carro/listado";
     }
 
-    // --- 2. AGREGAR PLACA AL CARRO ---
     @PostMapping("/agregarPlaca")
     public String agregarPlaca(
             @RequestParam("idPlaca") Integer idPlaca,
             HttpSession session,
             Model model) {
         try {
-            // 1. Obtener el carro de la sesión
             List<Item> carro = carroService.obtenerCarro(session);
 
-            // 2. Ejecutar la lógica de negocio (el Service asume cantidad = 1)
             carroService.agregarCategoria(carro, idPlaca);
 
-            // 3. Guardar el carro actualizado en la sesión
             carroService.guardarCarro(session, carro);
 
-            // 4. Recalcular y actualizar el Model con los datos necesarios
             model.addAttribute("carroItems", carro);
             model.addAttribute("totalCarro", carroService.calcularTotal(carro));
 
-            // 5. Retornar el fragmento HTML
         } catch (RuntimeException e) {
             return "redirect:/carro/listado";
         }

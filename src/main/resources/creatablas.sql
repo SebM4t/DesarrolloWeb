@@ -119,6 +119,7 @@ create table venta (
   id_placa INT NULL,
   id_material INT NULL,
   id_tamanio INT NULL,
+  cantidad INT NULL,
   precio_historico decimal(12,2) check (precio_historico>= 0),
   fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -312,3 +313,6 @@ SELECT * FROM material;
 ALTER TABLE placa MODIFY COLUMN imagen_nombre VARCHAR(500);
 ALTER TABLE placa MODIFY COLUMN imagen_nombre TEXT;
 DESCRIBE placa;	
+
+Select * from placa;
+update placa set disponible = FALSE WHERE id_placa=9;

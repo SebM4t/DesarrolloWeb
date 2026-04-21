@@ -61,14 +61,14 @@ public class CarroService {
                 .filter(i -> i.getPlaca() != null && i.getPlaca().getIdPlaca().equals(idPlaca))
                 .findFirst();
 
-        if (!itemExistente.isPresent()) {
-
+        if (itemExistente.isPresent()) {
+            Item item = itemExistente.get();
+            item.setCantidad(item.getCantidad() + 1);
+        } else {
             Item nuevoItem = new Item();
             nuevoItem.setPlaca(placa);
-
-            BigDecimal precioFinalCategoria = placa.getPrecio();
-            nuevoItem.setPrecioHistorico(precioFinalCategoria);
-
+            nuevoItem.setPrecioHistorico(placa.getPrecio());
+            nuevoItem.setCantidad(1);
             carro.add(nuevoItem);
         }
     }
@@ -92,7 +92,7 @@ public class CarroService {
 
             BigDecimal precioFinalDisenar = material.getPrecio().add(tamanio.getPrecioAdicional());
             nuevoItem.setPrecioHistorico(precioFinalDisenar);
-
+            nuevoItem.setCantidad(1);
             carro.add(nuevoItem);
         }
     }
@@ -138,7 +138,6 @@ public class CarroService {
     }
 
     public BigDecimal calcularTotal(List<Item> carro) {
-        // Sumar todos los subtotales de la lista
         return carro.stream()
                 .map(Item::getSubTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -176,21 +175,23 @@ public class CarroService {
 
             if (item.getPlaca() != null) {
                 venta.setPlaca(item.getPlaca());
-            }
-            if (item.getMaterial() != null) {
+                venta.setCantidad(item.getCantidad() != null ? item.getCantidad() : 1);
+                venta.setPrecioHistorico(item.getPrecioHistorico());
+            } else {
                 venta.setMaterial(item.getMaterial());
-            }
-            if (item.getTamanio() != null) {
                 venta.setTamanio(item.getTamanio());
+                venta.setCantidad(item.getCantidad() != null ? item.getCantidad() : 1);
+
+                BigDecimal precioMaterial = item.getMaterial() != null ? item.getMaterial().getPrecio() : BigDecimal.ZERO;
+                BigDecimal precioTamanio = item.getTamanio() != null ? item.getTamanio().getPrecioAdicional() : BigDecimal.ZERO;
+                venta.setPrecioHistorico(precioMaterial.add(precioTamanio));
             }
 
-            venta.setPrecioHistorico(item.getPrecioHistorico());
             venta.setFechaCreacion(LocalDateTime.now());
             venta.setFechaModificacion(LocalDateTime.now());
 
             ventaRepository.save(venta);
         }
-
         // 3. Limpiar carro (El controller se encargará de esto)
         return factura;
     }

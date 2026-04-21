@@ -40,9 +40,18 @@ public class Venta implements Serializable {
 
     private BigDecimal precioHistorico;
     
+    private Integer cantidad;
+    
     @Column(name = "fecha_creacion", updatable = false)
     private LocalDateTime fechaCreacion;
 
     @Column(name = "fecha_modificacion")
     private LocalDateTime fechaModificacion;
+    
+    public BigDecimal getSubTotal() {
+    if (precioHistorico == null || cantidad == null) {
+        return BigDecimal.ZERO;
+    }
+    return precioHistorico.multiply(BigDecimal.valueOf(cantidad));
+}
 }

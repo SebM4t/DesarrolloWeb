@@ -17,12 +17,13 @@ public class Item implements Serializable {
     private Placa placa;
     private Material material;
     private Tamanio tamanio;
+    private Integer cantidad;
 
     // Cantidad deseada por el usuario
     private BigDecimal precioHistorico;
 
     // Método para calcular el subtotal
     public BigDecimal getSubTotal() {
-        return precioHistorico != null ? precioHistorico : BigDecimal.ZERO;
+        return precioHistorico != null ? precioHistorico.multiply(BigDecimal.valueOf(cantidad)) : BigDecimal.ZERO;
     }
 }
