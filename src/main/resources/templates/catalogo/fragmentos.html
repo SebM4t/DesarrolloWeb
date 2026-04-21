@@ -5,7 +5,7 @@
         <div class='col-md-12 text-center'>
             <button type="button" class="btn btn-warning shadow-sm fw-bold" 
                     data-bs-toggle="modal" data-bs-target="#agregarProductoModal">
-                <i class="fa-solid fa-plus"></i> Añadir Nuevo al Catálogo
+                <i class="fa-solid fa-plus"></i>[[#{catalogo.agregar}]]
             </button>
         </div>
     </div>
@@ -72,7 +72,7 @@
 
         <div class="row">
             <div class="col-md-7">
-                <h4 class="text-center mb-3">Placas Conmemorativas</h4>
+                <h4 class="text-center mb-3">[[#{catalogo.placas}]]</h4>
                 <div class="row">
                     <div class="col-4 mb-4" th:each="p : ${placas}">
                         <div class="card h-100 shadow-sm border-0">
@@ -86,7 +86,7 @@
                                 <span class="text-success fw-bold">₡[[${#numbers.formatInteger(p.precio, 0, 'POINT')}]]</span>
                             </div>
                             <div class="card-footer bg-white border-0">
-                                <a th:href="@{'/placa/detalle/' + ${p.idPlaca}}" class="btn btn-sm btn-outline-dark w-100 mb-2">Ver detalle</a>
+                                <a th:href="@{'/placa/detalle/' + ${p.idPlaca}}" class="btn btn-sm btn-outline-dark w-100 mb-2">[[#{catalogo.detalle}]]</a>
                                 <div class="d-flex justify-content-center gap-1 mt-1" sec:authorize="hasRole('ADMIN')">
                                     <a th:href="@{'/placa/modificar/' + ${p.idPlaca}}" class="btn btn-warning btn-sm py-0 px-2">
                                         <i class="fas fa-edit fa-xs"></i>
@@ -104,7 +104,7 @@
                 </div>
             </div>
             <div class="col-md-4 border-start">
-                <h4 class="text-center mb-3">Reconocimientos</h4>
+                <h4 class="text-center mb-3">[[#{catalogo.reconocimientos}]]</h4>
                 <div class="row row-cols-2 g-2"> 
                     <div class="col mb-3" th:each="trofeo : ${trofeos}">
                         <div class="card h-100 shadow-sm border-0">

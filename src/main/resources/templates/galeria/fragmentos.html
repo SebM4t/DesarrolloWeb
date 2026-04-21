@@ -57,7 +57,7 @@
 
         <div class="col-md-4 border-start">
             <div class="p-3 rounded text-center mb-4" style="background-color: #E2B844">
-                <h4 class="fw-bold mb-0 text-dark">COMENTARIOS</h4>
+                <h4 class="fw-bold mb-0 text-dark">[[#{diseno.comentarios}]]</h4>
             </div>
             <div class="d-flex flex-column gap-3">
                 <div th:replace="~{:: bloqueComentario('USUARIO 1', 'Excelente servicio.')}"/>
@@ -69,45 +69,73 @@
     <div class="modal fade" id="modalAgregarGaleria" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form th:action="@{/galeria/guardar}" method="POST" enctype="multipart/form-data">
-                    <div class="modal-header bg-dark text-white"><h5>Nueva Placa</h5></div>
+                <form th:action="@{/galeria/guardar}" method="POST" enctype="multipart/form-data" class="was-validated">
+                    <div class="modal-header bg-dark text-white">
+                        <h5 class="modal-title">Nueva Placa</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
                     <div class="modal-body">
-                        <div class="mb-3"><label class="fw-bold">Nombre</label><input type="text" name="nombre" class="form-control" required/></div>
-                        <div class="mb-3"><label class="fw-bold">Material</label><input type="text" name="material" class="form-control" required/></div>
-                        <div class="mb-3"><label class="fw-bold">Precio</label><input type="number" name="precio" class="form-control" required/></div>
                         <div class="mb-3">
-                            <label class="fw-bold">Categoría</label>
-                            <select name="categoria.idCategoria" class="form-select">
+                            <label class="fw-bold">Tipo de Categoría</label>
+                            <select name="categoria.idCategoria" class="form-select" required>
                                 <option th:each="c : ${categorias}" th:value="${c.idCategoria}" th:text="${c.descripcion}"></option>
                             </select>
                         </div>
-                        <div class="mb-3"><label class="fw-bold">Imagen</label><input type="file" name="imagenFile" class="form-control"/></div>
+                        <div class="mb-3">
+                            <label class="fw-bold">Nombre</label>
+                            <input type="text" name="nombre" class="form-control" required/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="fw-bold">Precio (₡)</label>
+                            <input type="number" name="precio" class="form-control" required/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="fw-bold">Material / Detalle</label>
+                            <input type="text" name="material" class="form-control" required/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="fw-bold">Descripción</label>
+                            <textarea name="descripcion" class="form-control" required placeholder="Breve descripción..."></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="fw-bold">Tamaño (Dimensiones)</label>
+                            <input type="text" name="tamanio" class="form-control" required placeholder="Ej: 20x30 cm"/>
+                        </div>
+                        <input type="hidden" name="disponible" value="true"/>
+                        <div class="mb-3">
+                            <label class="fw-bold">Imagen</label>
+                            <input type="file" name="imagenFile" class="form-control" onchange="mostrarImagen(this);"/>
+                            <img id="blah2" src="#" alt="vista previa" height="200" class="mt-2" style="display:none;"/>
+                        </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success">Guardar en Galería</button>
+                        <button type="submit" class="btn btn-success w-100">Guardar en Galería</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="confirmarEliminarModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form th:action="@{/galeria/eliminar}" method="POST">
-                    <input type="hidden" name="idPlaca" id="idPlacaEliminar"/>
-                    <div class="modal-header bg-danger text-white"><h5>Eliminar Placa</h5></div>
-                    <div class="modal-body text-center">
-                        <p>¿Estás seguro de eliminar esta placa?</p>
-                        <h4 id="nombrePlacaEliminar" class="fw-bold"></h4>
+            <div class="modal fade" id="confirmarEliminarModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <form th:action="@{/galeria/eliminar}" method="POST">
+                            <input type="hidden" name="idPlaca" id="idPlacaEliminar" value=""/>
+                            <div class="modal-header bg-warning text-dark">
+                                <h5 class="modal-title">Confirmar Acción</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>¿Seguro que quieres eliminar el producto? <strong id="nombrePlacaEliminar"></strong></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-danger">Confirmar Eliminación</button>
-                    </div>
-                </form>
+                </div>
             </div>
-        </div>
-    </div>
 </section>
 
 <section th:fragment="modificaGaleria">

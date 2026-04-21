@@ -202,9 +202,7 @@
 
     <!-- Fragmento #3 define el footer de las páginas, aparte de esto se podria incluir enlaces a redes socilaes y demás -->
     <footer th:fragment="footer" class="p-2 mt-5 text-black" style="background-color: #E2B844">
-        <p class="mb-0">© 2026 La Casa de la Placa — Todos los derechos reservados |
-            Desarrollado por <strong>Fidelitas, Grupo #7</strong>
-        </p>
+        <p>[[#{plantilla.derechos}]]</p>
     </footer>
 
     <!-- Fragmento #4 tablas del inicio con la historia de la empresa -->
@@ -215,33 +213,22 @@
                 <div class="col-lg-7">
                     <div class="card border-0 mb-3" style="background-color: #E2B844">
                         <div class="card-body p-3">
-                            <h5 class="card-title">Arma tu placa</h5>
-                            <p class="card-text" style="text-align: justify;">La sección "Arma tu placa" permite al usuario
-                                personalizar completamente su placa conmemorativa o reconocimiento.
-                                Aquí puede elegir el material, tamaño, forma, tipografía, íconos
-                                y mensaje personalizado, visualizando cada cambio en tiempo real.</p>
+                            <h5 class="card-title">[[#{inicio.titulo_placa}]]</h5>
+                            <p class="card-text" style="text-align: justify;">[[#{inicio.placa_descripcion}]]</p>
                         </div>
                     </div>
 
                     <div class="card border-0 mb-3" style="background-color: #E2B844">
                         <div class="card-body p-3">
-                            <h5 class="card-title">Reconocimientos</h5>
-                            <p class="card-text">La sección "Reconocimientos" permite a los usuarios
-                                crear placas destinadas a celebrar logros, méritos o agradecimientos.
-                                Aquí pueden seleccionar modelos predefinidos, personalizar mensajes,
-                                elegir estilos de tipografía y colores, y añadir elementos decorativos
-                                que refuercen el propósito del reconocimiento.</p>
+                            <h5 class="card-title">[[#{inicio.titulo_reconocimientos}]]</h5>
+                            <p class="card-text">[[#{inicio.reconocimiento_descripcion}]]</p>
                         </div>
                     </div>
 
                     <div class="card border-0 mb-3" style="background-color: #E2B844">
                         <div class="card-body p-3">
-                            <h5 class="card-title">Placas para Mascotas</h5>
-                            <p class="card-text" style="text-align: justify;">La sección "Placas para mascotas" está diseñada
-                                para que los usuarios creen placas identificativas o conmemorativas
-                                para sus animales. Ofrece opciones de forma, tamaño, material y
-                                grabado, además de íconos y elementos visuales relacionados
-                                con mascotas.</p>
+                            <h5 class="card-title">[[#{inicio.titulo_mascotas}]]</h5>
+                            <p class="card-text" style="text-align: justify;">[[#{inicio.mascotas_descripcion}]]</p>
                         </div>
                     </div>
 
@@ -250,18 +237,8 @@
                 <div class="col-lg-5 d-flex">
                     <div class="card w-100" style="background-color: #E2B844">
                         <div class="card-body p-3">
-                            <h5 class="card-title" style="text-align: center">Historia</h5>
-                            <p class="card-text" style="text-align: justify;">La "Fundición Jiménez" y "La Casa de la Placa"
-                                son empresas familiares fundadas en los años 90 en Concepción
-                                Arriba de Alajuelita, por el señor Jorge Jiménez Jiménez, como
-                                necesidad para sobrevivir y solventar la necesidad de placas
-                                conmemorativas de la zona y reconocimientos empresariales y
-                                estudiantiles. "La Casa de la Placa" fue creada como solución
-                                a la alta demanda de placas conmemorativas en pandemia, ya que
-                                los dueños actuales se dieron cuenta de que no daban a basto
-                                recibiendo solicitudes y produciendo. Separando las ventas de
-                                la producción lograron establecer una línea de negocio continua
-                                y sin problemas para recibir solicitudes.</p>
+                            <h5 class="card-title" style="text-align: center">[[#{inicio.titulo_historia}]]</h5>
+                            <p class="card-text" style="text-align: justify;">[[#{inicio.historia_descripcion}]]</p>
                         </div>
                     </div>
                 </div>

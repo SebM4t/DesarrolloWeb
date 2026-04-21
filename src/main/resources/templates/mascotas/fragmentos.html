@@ -17,7 +17,8 @@
             <div class="row row-cols-2 row-cols-md-3 g-4 justify-content-center mt-3">
                 <div class="col">
                     <div class="card border-0">
-                        <img src="..." class="card-img-top border border-dark" alt=https://placehold.co/400x300?text=Sin+Imagen>
+                        <img th:src="@{img/placas/mascotas1.jpeg}" style="width: 100%; height: 400px; object-fit: contain;" 
+                             class="img-fluid rounded" alt="...">
                         <div class="text-center mt-2">
                             <a th:href="@{/galeria/listado}" class="btn btn-warning">
                                 Tipos de placas para mascotas
@@ -27,7 +28,8 @@
                     </div>
                 </div>
                 <div class="card border-0">
-                    <img src="..." class="card-img-top border border-dark" alt="...">
+                    <img th:src="@{img/placas/mascotas2.jpeg}" style="width: 100%; height: 400px; object-fit: contain;" 
+                             class="img-fluid rounded" alt="...">
                     <div class="text-center mt-2">
                         <a th:href="@{/faq}" class="btn btn-warning">
                             Preguntas frecuentes de mascotas
@@ -35,7 +37,8 @@
                     </div>
                 </div>
                 <div class="card border-0">
-                    <img src="..." class="card-img-top border border-dark" alt="...">
+                    <img th:src="@{img/placas/mascotas3.jpeg}" style="width: 100%; height: 400px; object-fit: contain;" 
+                         class="img-fluid rounded" alt="...">
                     <div class="text-center mt-2">
                         <a th:href="@{/disenar}" class="btn btn-warning">
                             Diseñar placa para mascota

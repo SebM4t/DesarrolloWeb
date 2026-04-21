@@ -62,7 +62,13 @@ public class GaleriaController {
     }
 
     @PostMapping("/eliminar")
-    public String eliminar(@RequestParam Integer idPlaca, RedirectAttributes redirectAttributes) {
+    public String eliminar(@RequestParam(required = false) Integer idPlaca, RedirectAttributes redirectAttributes) {
+
+        if (idPlaca == null) {
+            redirectAttributes.addFlashAttribute("error", "No se especificó la placa a eliminar.");
+            return "redirect:/galeria/listado";
+        }
+
         String titulo = "todoOk";
         String detalle = "mensaje.eliminado";
         try {

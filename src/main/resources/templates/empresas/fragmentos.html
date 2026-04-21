@@ -17,29 +17,32 @@
             <div class="row row-cols-2 row-cols-md-3 g-4 justify-content-center mt-3">
                 <div class="col">
                     <div class="card border-0">
-                        <img src="..." class="card-img-top border border-dark" alt="...">
+                        <img th:src="@{img/placas/empresas1.jpg}" style="width: 100%; height: 400px; object-fit: contain;" 
+                             class="img-fluid rounded" alt="...">
                         <div class="text-center mt-2">
-                            <button class="btn btn-link text-decoration-none text-dark p-0 fw-bold" style="background: none; box-shadow: none;" type="button">
+                            <a th:href="@{/galeria/listado}" class="btn btn-warning">
                                 Tipos de placas para empresas
-                            </button>
+                            </a>
 
                         </div>
                     </div>
                 </div>
                 <div class="card border-0">
-                    <img src="..." class="card-img-top border border-dark" alt="...">
+                    <img th:src="@{img/placas/empresas2.jpg}" style="width: 100%; height: 400px; object-fit: contain;" 
+                             class="img-fluid rounded" alt="...">
                     <div class="text-center mt-2">
-                        <button class="btn btn-link text-decoration-none text-dark p-0 fw-bold" style="background: none; box-shadow: none;" type="button">
-                            Información de Servicios Corporativos
-                        </button>
+                        <a th:href="@{/faq}" class="btn btn-warning">
+                            Información de servicios corporativos
+                        </a>
                     </div>
                 </div>
                 <div class="card border-0">
-                    <img src="..." class="card-img-top border border-dark" alt="...">
+                    <img th:src="@{img/placas/empresas3.jpg}" style="width: 100%; height: 400px; object-fit: contain;" 
+                             class="img-fluid rounded" alt="...">
                     <div class="text-center mt-2">
-                        <button class="btn btn-link text-decoration-none text-dark p-0 fw-bold" style="background: none; box-shadow: none;" type="button">
+                        <a th:href="@{/soporte}" class="btn btn-warning">
                             Formulario de Cotización de Empresas
-                        </button>
+                        </a>
                     </div>
                 </div>
 

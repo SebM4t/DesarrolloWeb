@@ -49,19 +49,17 @@ public class PlacaService {
     }
 
     public void save(Placa placa, MultipartFile imagenFile) {
-        if (placa.getIdPlaca() == null) {
-            placaRepository.save(placa);
-        }
+        placaRepository.save(placa);
 
         if (imagenFile != null && !imagenFile.isEmpty()) {
             try {
                 String url = firebaseStorageService.uploadImage(imagenFile, "placas", placa.getIdPlaca());
                 placa.setImagenNombre(url);
+                placaRepository.save(placa); // guarda de nuevo con la URL
             } catch (IOException e) {
                 System.out.println("Error al subir imagen: " + e.getMessage());
             }
         }
-        placaRepository.save(placa);
     }
     public List<Placa> consultaJPQL(double precioInf, double precioSup){
         return placaRepository.consultaJPQL(precioInf, precioSup);

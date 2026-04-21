@@ -130,6 +130,16 @@ create table venta (
   foreign key fk_venta_placa (id_placa) references placa(id_placa)
   );
 
+create table cuenta (
+  id_cuenta int not null auto_increment,
+  id_usuario int not null,
+  ubicacion varchar(255),
+  genero varchar(50),
+  primary key (id_cuenta),
+  unique (id_usuario),
+  foreign key (id_usuario) references usuario(id_usuario)
+);
+
 INSERT INTO categoria (id_categoria, nombre, descripcion) VALUES  
 (1, 'Placas Conmemorativas', 'Placas para homenajes y recuerdos'),
 (2, 'Trofeos y Reconocimientos', 'Trofeos para premiaciones y logros'),
@@ -284,6 +294,10 @@ INSERT INTO venta (id_factura,id_placa,id_material, id_tamanio, precio_historico
 (1,5,3,2,45000),
 (1,9,5,6,15780),
 (1,10,3,5,15000);
+
+INSERT INTO cuenta (id_usuario,ubicacion, genero) values
+(2,'Sabanilla','Femenino'),
+(3,'Curridabat','Masculino');
 
 -- Consultas finales
 SELECT * FROM usuario;

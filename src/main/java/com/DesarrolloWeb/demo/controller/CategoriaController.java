@@ -40,7 +40,13 @@ public class CategoriaController {
     }
 
     @PostMapping("/eliminar")
-    public String eliminar(@RequestParam Integer idCategoria, RedirectAttributes redirectAttributes) {
+    public String eliminar(@RequestParam (required = false) Integer idCategoria, RedirectAttributes redirectAttributes) {
+        
+        if (idCategoria == null) {
+            redirectAttributes.addFlashAttribute("error", "No se especificó la placa a eliminar.");
+            return "redirect:/placa/catalogo";
+        }
+        
         String titulo = "todoOk";
         String detalle = "mensaje.eliminado";
         

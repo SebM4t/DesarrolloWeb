@@ -59,26 +59,38 @@ document.addEventListener('DOMContentLoaded', function () {
     const confirmModal = document.getElementById('confirmModal');
     if (confirmModal) {
         confirmModal.addEventListener('show.bs.modal', function (event) {
-            const button = event.relatedTarget; 
-            const tipo = button.getAttribute('data-bs-tipo'); 
+            const button = event.relatedTarget;
+            const tipo = button.getAttribute('data-bs-tipo');
 
-            const select = document.getElementById('select-' + tipo);
-            const id = select.value;
-            const descripcion = select.options[select.selectedIndex].text;
+            // Si es eliminar material o tamaño (disenar)
+            if (tipo) {
+                const select = document.getElementById('select-' + tipo);
+                const id = select.value;
+                const descripcion = select.options[select.selectedIndex].text;
 
-            if (!id || id === "") {
-                alert("Por favor, selecciona un ítem para poder eliminarlo.");
-                event.preventDefault(); 
-                return;
+                if (!id || id === "") {
+                    alert("Por favor, selecciona un ítem para poder eliminarlo.");
+                    event.preventDefault();
+                    return;
+                }
+
+                const form = document.getElementById('formEliminar');
+                const inputId = document.getElementById('modalId');
+                const txtDesc = document.getElementById('modalDescripcion');
+                form.setAttribute('action', '/' + tipo + '/eliminar');
+                inputId.value = id;
+                txtDesc.textContent = descripcion;
+                inputId.setAttribute('name', tipo === 'material' ? 'idMaterial' : 'idTamanio');
+
+            } else {
+                // Si es eliminar placa del catálogo
+                const id = button.getAttribute('data-bs-id');
+                const descripcion = button.getAttribute('data-bs-descripcion')
+                        || button.getAttribute('data-bs-nombre');
+
+                document.getElementById('modalId').value = id;
+                document.getElementById('modalDescripcion').textContent = descripcion;
             }
-
-            const form = document.getElementById('formEliminar');
-            const inputId = document.getElementById('modalId');
-            const txtDesc = document.getElementById('modalDescripcion');
-            form.setAttribute('action', '/' + tipo + '/eliminar');
-            inputId.value = id;
-            txtDesc.textContent = descripcion;
-            inputId.setAttribute('name', tipo === 'material' ? 'idMaterial' : 'idTamanio');
         });
     }
 
@@ -258,4 +270,16 @@ function verificarBoton() {
     const mat = document.getElementById("form-idMaterial").value;
     const tam = document.getElementById("form-idTamanio").value;
     document.getElementById("btn-carrito").disabled = !(mat && tam);
+}
+
+const confirmarEliminarModal = document.getElementById('confirmarEliminarModal');
+if (confirmarEliminarModal) {
+    confirmarEliminarModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const id = button.getAttribute('data-bs-id');
+        const nombre = button.getAttribute('data-bs-descripcion');
+
+        document.getElementById('idPlacaEliminar').value = id;
+        document.getElementById('nombrePlacaEliminar').textContent = nombre;
+    });
 }
