@@ -77,7 +77,7 @@
                     <div class="col-4 mb-4" th:each="p : ${placas}">
                         <div class="card h-100 shadow-sm border-0">
                             <div class="card-img-top bg-light text-center p-2">
-                                <img th:src="${p.imagenNombre != null && !p.imagenNombre.isEmpty() ? p.imagenNombre : 'https://placehold.co/400x300?text=Sin+Imagen'}" 
+                                <img th:src="${p.imagenNombre != null && !p.imagenNombre.isEmpty() ? p.imagenNombre: 'https://placehold.co/400x300?text=Sin+Imagen'}"
                                      height="120" class="img-fluid rounded"/>
                             </div>
                             <div class="card-body">
@@ -111,7 +111,9 @@
                     <div class="col mb-3" th:each="trofeo : ${trofeos}">
                         <div class="card h-100 shadow-sm border-0">
                             <div class="p-2 bg-light d-flex justify-content-center align-items-center" style="height: 120px;">
-                                <img th:src="${trofeo.imagenNombre}" 
+                                <img th:src="${trofeo.imagenNombre != null && !trofeo.imagenNombre.isEmpty() 
+                                     ? trofeo.imagenNombre 
+                                     : 'https://placehold.co/400x300?text=Sin+Imagen'}"
                                      class="img-fluid rounded" 
                                      style="max-height: 100%; object-fit: contain;">
                             </div>
