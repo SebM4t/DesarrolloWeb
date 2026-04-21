@@ -311,4 +311,4 @@ SELECT * FROM material;
 
 ALTER TABLE placa MODIFY COLUMN imagen_nombre VARCHAR(500);
 ALTER TABLE placa MODIFY COLUMN imagen_nombre TEXT;
-DESCRIBE placa;
+DESCRIBE placa;	

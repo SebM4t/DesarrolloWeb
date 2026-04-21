@@ -40,8 +40,8 @@
                         <li class="nav-item"><a class="nav-link" th:href="@{/faq}">[[#{plantilla.faq}]]</a></li>
                         <li class="nav-item"><a class="nav-link" th:href="@{/soporte}" sec:authorize="isAuthenticated()">[[#{plantilla.soporte}]]</a></li>
                         <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
-                            <a class="dropdown-item dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false"
-                               onclick="event.stopPropagation();">[[#{plantilla.mantenimiento}]]
+                            <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                [[#{plantilla.mantenimiento}]]
                             </a>
                             <ul class="dropdown-menu">                                            
                                 <li><a class="dropdown-item" th:href="@{/usuario/listado}">Usuarios</a></li>
@@ -59,7 +59,7 @@
                                 <li><a class="dropdown-item" th:href="@{/(lang=pt)}">Portugaise</a></li>
                             </ul>
                         </li>
-                        
+
                     </ul>
 
                     <ul class="navbar-nav ms-auto">
@@ -117,13 +117,14 @@
 
                             </ul>
                         </li>
-
                         <li class="nav-item" sec:authorize="isAuthenticated()">
                             <a class="nav-link" th:href="@{/carro}">
-                                <i class="fa-solid fa-cart-shopping"></i> Carro
+                                <i class="fa-solid fa-cart-shopping me-1"></i> Carro
                             </a>
                         </li>
                     </ul>
+
+
 
 
                     <!--<div id="resultBlock">

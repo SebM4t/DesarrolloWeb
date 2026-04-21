@@ -171,20 +171,24 @@ public class CarroService {
 
         // 2. CREAR Y PERSISTIR LINEAS DE VENTA (Venta) y ACTUALIZAR STOCK
         for (Item item : carro) {
-            // a. Verificar stock final antes de persistir (doble chequeo)
-            Placa placa = placaRepository.findById(item.getPlaca().getIdPlaca()).get();
-
-            // b. Crear entidad Venta (Línea de detalle)
             Venta venta = new Venta();
             venta.setFactura(factura);
-            venta.setPlaca(item.getPlaca());
-            venta.setMaterial(item.getMaterial());
-            venta.setTamanio(item.getTamanio());
+
+            if (item.getPlaca() != null) {
+                venta.setPlaca(item.getPlaca());
+            }
+            if (item.getMaterial() != null) {
+                venta.setMaterial(item.getMaterial());
+            }
+            if (item.getTamanio() != null) {
+                venta.setTamanio(item.getTamanio());
+            }
+
             venta.setPrecioHistorico(item.getPrecioHistorico());
             venta.setFechaCreacion(LocalDateTime.now());
             venta.setFechaModificacion(LocalDateTime.now());
-            ventaRepository.save(venta);
 
+            ventaRepository.save(venta);
         }
 
         // 3. Limpiar carro (El controller se encargará de esto)
