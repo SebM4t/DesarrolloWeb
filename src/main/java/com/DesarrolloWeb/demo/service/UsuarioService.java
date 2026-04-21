@@ -38,7 +38,7 @@ public class UsuarioService {
         }
         return usuarioRepository.findAll();
     }
-
+    
     @Transactional(readOnly = true)
     public Optional<Usuario> getUsuario(Integer idUsuario) {
         return usuarioRepository.findById(idUsuario);

@@ -39,7 +39,7 @@ public class Venta implements Serializable {
     private Material material;
 
     private BigDecimal precioHistorico;
-    private int cantidad;
+    
     @Column(name = "fecha_creacion", updatable = false)
     private LocalDateTime fechaCreacion;
 

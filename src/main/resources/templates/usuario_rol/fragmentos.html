@@ -1,44 +1,57 @@
 <section th:fragment="asignar">
-    <div class="card mb-4 shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="fas fa-search"></i> [[#{accion.buscar_usuario}]]</h5>
+
+    <div class="card mb-4 shadow border-0 rounded-4">
+        <div class="card-header text-dark rounded-top-4"
+             style="background: linear-gradient(90deg, #E2B844, #f4d35e);">
+            <h5 class="mb-0 fw-bold">
+                <i class="fas fa-search me-2"></i> [[#{accion.buscar_usuario}]]
+            </h5>
         </div>
-        <div class="card-body">
+
+        <div class="card-body bg-light rounded-bottom-4">
             <form method="GET"
                   th:action="@{/usuario_rol/buscar}" 
                   th:object="${usuario}"
                   class="row g-3 align-items-end">
+
                 <div class="col-md-4">
-                    <label for="usernameInput" class="form-label">[[#{usuario.username}]]</label>
+                    <label for="usernameInput" class="form-label fw-bold text-dark">
+                        <i class="fas fa-user me-1"></i> [[#{usuario.username}]]
+                    </label>
                     <input type="text" 
                            id="usernameInput"
                            name="username" 
                            th:field="*{username}"
-                           class="form-control"
+                           class="form-control rounded-3 shadow-sm"
                            required/>
                 </div>
+
                 <div class="col-md-auto">
-                    <button type="submit" class="btn btn-success">
-                        <i class="fas fa-search"></i> [[#{accion.buscar}]]
+                    <button type="submit" class="btn fw-bold text-dark shadow-sm"
+                            style="background-color: #E2B844;">
+                        <i class="fas fa-search me-1"></i> [[#{accion.buscar}]]
                     </button>
                 </div>
             </form>
         </div>
     </div>
-    
+
     <div class="row" th:if="${usuario != null and usuario.idUsuario != null}">
-        
+
         <div class="col-lg-4 mb-4">
-            <div class="card h-100 shadow">
-                <div class="card-header bg-info text-white">
-                    <h5 class="mb-0"><i class="fas fa-user-circle"></i> [[#{plantilla.tusuario}]]</h5>
+            <div class="card h-100 shadow border-0 rounded-4">
+                <div class="card-header text-dark"
+                     style="background-color:#E2B844;">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="fas fa-user-circle me-2"></i> [[#{plantilla.tusuario}]]
+                    </h5>
                 </div>
-                <div class="card-body text-center">
+
+                <div class="card-body text-center bg-light">
                     <img th:src="@{${usuario.rutaImagen}}" 
-                         alt="Imagen de Usuario" 
-                         class="img-fluid rounded-circle mb-3"
-                         style="width: 150px; height: 150px; object-fit: cover;"/>
-                    
+                         class="img-fluid rounded-circle mb-3 shadow"
+                         style="width:150px;height:150px;object-fit:cover;border:4px solid #E2B844;"/>
+
                     <ul class="list-group list-group-flush text-start">
                         <li class="list-group-item">
                             <strong>[[#{usuario.username}]]:</strong> [[${usuario.username}]]
@@ -56,25 +69,33 @@
                 </div>
             </div>
         </div>
-
+        
         <div class="col-lg-4 mb-4">
-            <div class="card h-100 shadow">
-                <div class="card-header bg-secondary text-white">
-                    <h5 class="mb-0"><i class="fas fa-check-circle"></i> [[#{role.usuario}]]</h5>
+            <div class="card h-100 shadow border-0 rounded-4">
+                <div class="card-header text-dark"
+                     style="background-color:#f4d35e;">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="fas fa-user-shield me-2"></i> [[#{role.usuario}]]
+                    </h5>
                 </div>
-                <div class="card-body p-0">
+
+                <div class="card-body p-0 bg-light">
                     <div th:if="${#lists.isEmpty(rolesAsignados)}" class="p-3 text-center text-muted">
                         [[#{role.no_asignados}]]
                     </div>
-                    <table th:unless="${#lists.isEmpty(rolesAsignados)}" class="table table-striped mb-0">
+
+                    <table th:unless="${#lists.isEmpty(rolesAsignados)}" class="table table-hover mb-0">
                         <tbody>
                             <tr th:each="rol : ${rolesAsignados}">
-                                <td>[[${rol.rol}]]</td> <td sec:authorize="hasAuthority('ADMIN')" class="text-end">
+                                <td class="fw-semibold">
+                                    <i class="fas fa-check-circle text-warning me-2"></i>
+                                    [[${rol.rol}]]
+                                </td>
+                                <td sec:authorize="hasRole('ADMIN')" class="text-end">
                                     <form method="get" th:action="@{/usuario_rol/eliminar}">
                                         <input type="hidden" name="idRol" th:value="${rol.idRol}"/>
                                         <input type="hidden" name="username" th:value="${usuario.username}"/>
-                                        <button class="btn btn-sm btn-danger" type="submit"
-                                                title="[[#{accion.eliminar_rol}]]">
+                                        <button class="btn btn-sm btn-dark rounded-circle" type="submit">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form> 
@@ -87,23 +108,33 @@
         </div>
 
         <div class="col-lg-4 mb-4">
-            <div class="card h-100 shadow">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0"><i class="fas fa-plus-square"></i> [[#{role.total}]]</h5>
+            <div class="card h-100 shadow border-0 rounded-4">
+                <div class="card-header text-dark"
+                     style="background-color:#E2B844;">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="fas fa-user-plus me-2"></i> [[#{role.total}]]
+                    </h5>
                 </div>
-                <div class="card-body p-0">
+
+                <div class="card-body p-0 bg-light">
                     <div th:if="${#lists.isEmpty(rolesDisponibles)}" class="p-3 text-center text-muted">
                         [[#{role.todos_asignados}]]
                     </div>
-                    <table th:unless="${#lists.isEmpty(rolesDisponibles)}" class="table table-striped mb-0">
+
+                    <table th:unless="${#lists.isEmpty(rolesDisponibles)}" class="table table-hover mb-0">
                         <tbody>
                             <tr th:each="rol : ${rolesDisponibles}">
-                                <td>[[${rol}]]</td> <td sec:authorize="hasAuthority('ADMIN')" class="text-end">
+                                <td class="fw-semibold">
+                                    <i class="fas fa-plus-circle text-warning me-2"></i>
+                                    [[${rol}]]
+                                </td>
+                                <td sec:authorize="hasRole('ADMIN')" class="text-end">
                                     <form method="get" th:action="@{/usuario_rol/agregar}">
                                         <input type="hidden" name="nombreRol" th:value="${rol}"/> 
                                         <input type="hidden" name="username" th:value="${usuario.username}"/>
-                                        <button class="btn btn-sm btn-success" type="submit"
-                                                title="[[#{accion.agregar_rol}]]">
+                                        <button class="btn btn-sm rounded-circle text-dark"
+                                                style="background-color:#E2B844;"
+                                                type="submit">
                                             <i class="fas fa-plus"></i>
                                         </button>
                                     </form>                                            
@@ -114,10 +145,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    
-    <div class="alert alert-warning" role="alert" th:if="${usuario == null and #request.getParameter('username') != null}">
-        <i class="fas fa-exclamation-triangle"></i> No se encontró ningún usuario con el nombre de usuario **[[${#request.getParameter('username')}]]**.
     </div>
 
 </section>
