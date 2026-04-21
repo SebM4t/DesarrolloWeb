@@ -1,8 +1,9 @@
 package com.DesarrolloWeb.demo.controller;
 
-
 import com.DesarrolloWeb.demo.domain.Usuario;
+import com.DesarrolloWeb.demo.domain.Cuenta;
 import com.DesarrolloWeb.demo.service.UsuarioService;
+import com.DesarrolloWeb.demo.repository.CuentaRepository;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,19 +35,19 @@ public class UsuarioRolController {
     public String buscarUsuario(@RequestParam("username") String username, Model model) {
         // Usa el método existente en UsuarioService
         Usuario usuario = usuarioService.getUsuarioPorUsername(username).orElse(null);
-        
+
         model.addAttribute("usuario", usuario);
 
         if (usuario != null) {
             // Obtener todos los nombres de roles
             List<String> todosRolesNombres = usuarioService.getRolesNombres();
-            
+
             // Filtrar los roles disponibles (los que no tiene el usuario)
             List<String> rolesDisponibles = todosRolesNombres.stream()
-                .filter(rolNombre -> usuario.getRoles().stream()
-                        .noneMatch(rolAsignado -> rolAsignado.getRol().equals(rolNombre)))
-                .toList();
-            
+                    .filter(rolNombre -> usuario.getRoles().stream()
+                    .noneMatch(rolAsignado -> rolAsignado.getRol().equals(rolNombre)))
+                    .toList();
+
             model.addAttribute("rolesAsignados", usuario.getRoles());
             model.addAttribute("rolesDisponibles", rolesDisponibles);
         }
@@ -56,22 +57,22 @@ public class UsuarioRolController {
 
     // 3. Endpoint para agregar un rol
     @GetMapping("/agregar")
-    public String agregarRol(@RequestParam("username") String username, 
-                             @RequestParam("nombreRol") String nombreRol) {
-        
+    public String agregarRol(@RequestParam("username") String username,
+            @RequestParam("nombreRol") String nombreRol) {
+
         usuarioService.asignarRolPorUsername(username, nombreRol);
-        
+
         // Redirige al /buscar para recargar los datos del usuario actualizado
-        return "redirect:/usuario_rol/buscar?username=" + username; 
+        return "redirect:/usuario_rol/buscar?username=" + username;
     }
 
     // 4. Endpoint para eliminar un rol
     @GetMapping("/eliminar")
-    public String eliminarRol(@RequestParam("username") String username, 
-                              @RequestParam("idRol") Integer idRol) {
-        
+    public String eliminarRol(@RequestParam("username") String username,
+            @RequestParam("idRol") Integer idRol) {
+
         usuarioService.eliminarRol(username, idRol);
-        
+
         // Redirige al /buscar para recargar los datos del usuario actualizado
         return "redirect:/usuario_rol/buscar?username=" + username;
     }

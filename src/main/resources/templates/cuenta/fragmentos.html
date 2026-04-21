@@ -1,0 +1,53 @@
+
+<section th:fragment="verCuenta" class="container-fluid mt-3">
+    <div class="row">
+        <div class="col-md-7">
+            <div class="card w-100 border-0" style="background-color: #E2B844; border-radius: 10px;">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-center mb-4" style="font-weight: bold;">Mi Cuenta</h5>
+                    <br/>
+                    <form th:action='@{/cuenta/guardar}' th:object='${cuenta}' class='was-validated' method="post">
+                        <input type="hidden" th:field="*{idCuenta}"/>
+                        <input type="hidden" th:field="*{usuario.idUsuario}"/>
+                        <div class="modal-body">
+                            <div class='mb-3'>
+                                <label class="fw-bold">Nombre</label>
+                                <input type="text" th:field="*{usuario.nombre}" class='form-control' required/>
+                            </div>
+                            <div class='mb-3'>
+                                <label class="fw-bold">Apellidos</label>
+                                <input type="text" th:field="*{usuario.apellidos}" class='form-control' required/>
+                            </div>
+                            <div class='mb-3'>
+                                <label class="fw-bold">Teléfono</label>
+                                <input type="text" th:field="*{usuario.telefono}" class='form-control' required/>
+                            </div>
+                            <div class='mb-3'>
+                                <label class="fw-bold">Correo</label>
+                                <input type="text" th:field="*{usuario.correo}" class='form-control' required/>
+                            </div>
+                            <div class='mb-3'>
+                                <label class="fw-bold">Username</label>
+                                <input type="text" th:field="*{usuario.username}" class='form-control' required/>
+                            </div>
+                            <div class='mb-3'>
+                                <label class="fw-bold">Genero</label>
+                                <input type="text" th:field="*{genero}" class='form-control'/>
+                            </div>
+                            <div class='mb-3'>
+                                <label class="fw-bold">Ubicación</label>
+                                <input type="text" th:field="*{ubicacion}" class='form-control'/>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-success w-100">Modificar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
