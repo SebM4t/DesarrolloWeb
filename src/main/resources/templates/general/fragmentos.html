@@ -5,6 +5,7 @@
     <head th:fragment="head">
         <title>La Casa de la Placa</title>
         <meta charset="UTF-8"/>
+        <link rel="icon" type="image/svg+xml" th:href="@{/fav/logo.svg}"/>
         <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
         <link th:href="@{/webjars/font-awesome/css/all.css}" rel="stylesheet"/>
         <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
@@ -38,7 +39,7 @@
                         <li class="nav-item"><a class="nav-link" th:href="@{/funciones}">Funciones</a></li>
                         <li class="nav-item"><a class="nav-link" th:href="@{/faq}">FAQ</a></li>
                         <li class="nav-item"><a class="nav-link" th:href="@{/soporte}" sec:authorize="isAuthenticated()">Soporte</a></li>
-                        <li class="submenu submenu-md dropend" sec:authorize="hasRole('USER')">
+                        <li class="submenu submenu-md dropend" sec:authorize="hasRole('ADMIN')">
                             <a class="dropdown-item dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false"
                                onclick="event.stopPropagation();">Mantenimiento
                             </a>

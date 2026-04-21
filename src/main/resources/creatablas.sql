@@ -19,7 +19,7 @@ CREATE TABLE placa (
     material VARCHAR(100) NOT NULL,
     tamanio VARCHAR(50) NOT NULL,
     precio DECIMAL(10,2) NOT NULL,
-    imagen_nombre VARCHAR(250),
+    imagen_nombre VARCHAR(500),
     disponible BOOLEAN DEFAULT TRUE,
     id_categoria INT,
     CONSTRAINT fk_categoria 
@@ -116,11 +116,10 @@ CREATE TABLE constante (
 create table venta (
   id_venta INT NOT NULL AUTO_INCREMENT,
   id_factura INT NOT NULL,
-  id_placa INT NOT NULL,
-  id_material INT NOT NULL,
-  id_tamanio INT NOT NULL,
-  precio_historico decimal(12,2) check (precio_historico>= 0), 
-  cantidad int unsigned check (cantidad> 0),
+  id_placa INT NULL,
+  id_material INT NULL,
+  id_tamanio INT NULL,
+  precio_historico decimal(12,2) check (precio_historico>= 0),
   fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id_venta),
@@ -139,25 +138,35 @@ INSERT INTO categoria (id_categoria, nombre, descripcion) VALUES
 
 INSERT INTO placa (nombre, descripcion, material, tamanio, precio, imagen_nombre, disponible, id_categoria) VALUES 
 
-('Placa de Cerámica', 'Placa con acabado en cerámica', 'Cerámica', '20x30cm', 25000.00, 'placamarmol.jpeg', TRUE, 1),
+('Placa de Cerámica', 'Placa con acabado en cerámica', 'Cerámica', '20x30cm', 25000.00, 'img00000000000001.jpg', TRUE, 1),
 
-('Placa de Granito', 'Grabado resistente en granito', 'Granito', '25x35cm', 35000.00, 'placagranito.jpg', TRUE, 1),
+('Placa de Granito', 'Grabado resistente en granito', 'Granito', '25x35cm', 35000.00, 'img00000000000002.jpg', TRUE, 1),
 
-('Placa de Mármol', 'Elegante placa en mármol', 'Mármol', '25x35cm', 40000.00, 'placamarmol2.jpg', TRUE, 1),
+('Placa de Mármol', 'Elegante placa en mármol', 'Mármol', '25x35cm', 40000.00, 'img00000000000003.jpg', TRUE, 1),
 
-('Placa de Aluminio Pulido', 'Acabado brillante y duradero', 'Aluminio', '20x30cm', 22000.00, 'placaaluminiopulido.jpg', TRUE, 1),
+('Placa de Aluminio Pulido', 'Acabado brillante y duradero', 'Aluminio', '20x30cm', 22000.00, 'img00000000000004.jpg', TRUE, 1),
 
-('Placa de Foto Cerámica', 'Placa con fotografía incluida', 'Cerámica', '20x30cm', 30000.00, 'placagranja.jpeg', TRUE, 1),
+('Placa de Foto Cerámica', 'Placa con fotografía incluida', 'Cerámica', '20x30cm', 30000.00, 'img00000000000005.jpg', TRUE, 1),
 
-('Placa de Aluminio Fundido', 'Estilo clásico y pesado', 'Aluminio', '30x40cm', 45000.00, 'placaaluminiofundido.jpg', TRUE, 1),
+('Placa de Aluminio Fundido', 'Estilo clásico y pesado', 'Aluminio', '30x40cm', 45000.00, 'img00000000000006.jpg', TRUE, 1),
 
-('Esmeralda Base Mármol', 'Trofeo de prestigio', 'Cristal/Mármol', '25cm', 45000.00, 'esmeraldabasemarmol.jpg', TRUE, 2), --
+('Placa para Bufete', 'Placa formal para abogados', 'Bronce/Aluminio', '40x20cm', 50000.00, 'img00000000000007.jpg', TRUE, 1),
 
-('Reconocimiento de Aluminio', 'Placa sobre base de madera', 'Aluminio', '20x25cm', 28000.00, 'reconocimiento_aluminio.jpg', TRUE, 2), --
+('Placa para Constructoras', 'Placa institucional', 'Metal', '50x40cm', 60000.00, 'img00000000000008.jpg', TRUE, 1),
 
-('Reconocimiento Aluminio Pulido', 'Acabado de alta gama', 'Aluminio', '25x20cm', 32000.00, 'reconocimiento_aluminio2.jpg', TRUE, 2), --
+('Placa en Vidrio', 'Diseño moderno y minimalista', 'Vidrio', '30x30cm', 35000.00, 'img00000000000009.jpg', TRUE, 1),
 
-('Reconocimiento en Acrílico', 'Diseño moderno transparente', 'Acrílico', '20x30cm', 25000.00, 'reconocimiento_acrilico.jpg', TRUE, 2), --
+('Esmeralda Base Mármol', 'Trofeo de prestigio', 'Cristal/Mármol', '25cm', 45000.00, 'img00000000000010.jpg', TRUE, 2),
+
+('Gota Acostada de Mármol', 'Diseño curvo exclusivo', 'Mármol', '20cm', 38000.00, 'img00000000000011.jpg', TRUE, 2),
+
+('Gota Base de Mármol', 'Trofeo vertical de gota', 'Mármol/Vidrio', '30cm', 42000.00, 'img00000000000012.jpg', TRUE, 2),
+
+('Reconocimiento de Aluminio', 'Placa sobre base de madera', 'Aluminio', '20x25cm', 28000.00, 'img00000000000013.jpg', TRUE, 2),
+
+('Reconocimiento Aluminio Pulido', 'Acabado de alta gama', 'Aluminio', '25x20cm', 32000.00, 'img00000000000014.jpg', TRUE, 2),
+
+('Reconocimiento en Acrílico', 'Diseño moderno transparente', 'Acrílico', '20x30cm', 25000.00, 'img00000000000015.jpg', TRUE, 2),
 
 ('Placa de Granito', 'Placa con fotografía', 'Granito', '25x40cm', 115000.00, 'img00000000000016.jpg', TRUE, 3),
 
@@ -271,10 +280,10 @@ INSERT INTO constante (atributo,valor) VALUES
 ('app.paypal.cancel-error','/paypal/pago_error'),
 ('app.paypal.cancel-success','/paypal/pago_success');
 
-INSERT INTO venta (id_factura,id_placa,id_material, id_tamanio, precio_historico,cantidad) values
-(1,5,3,2,45000,3),
-(1,9,5,6,15780,2),
-(1,10,3,5,15000,3);
+INSERT INTO venta (id_factura,id_placa,id_material, id_tamanio, precio_historico) values
+(1,5,3,2,45000),
+(1,9,5,6,15780),
+(1,10,3,5,15000);
 
 -- Consultas finales
 SELECT * FROM usuario;
@@ -286,5 +295,6 @@ SELECT id_placa, nombre, disponible, id_categoria FROM placa;
 
 SELECT * FROM material;
 
-SELECT nombre, imagen_nombre FROM placa;
-SELECT * FROM material;
+ALTER TABLE placa MODIFY COLUMN imagen_nombre VARCHAR(500);
+ALTER TABLE placa MODIFY COLUMN imagen_nombre TEXT;
+DESCRIBE placa;

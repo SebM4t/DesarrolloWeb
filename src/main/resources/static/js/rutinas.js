@@ -108,10 +108,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
-// Forzar la navegación de los enlaces "Agregar Nuevo"
 document.querySelectorAll('.dropdown-item[href]').forEach(enlace => {
     enlace.addEventListener('click', function (e) {
-        // Obtenemos la ruta del th:href (que ya se convirtió en href normal)
         const ruta = this.getAttribute('href');
         if (ruta && ruta !== '#') {
             window.location.href = ruta;
@@ -159,6 +157,9 @@ function seleccionarMaterial(select) {
     }
 
     actualizarResumen();
+    
+    document.getElementById("form-idMaterial").value = select.value;
+    verificarBoton();
 }
 
 function seleccionarTamanio(select) {
@@ -175,6 +176,9 @@ function seleccionarTamanio(select) {
     }
 
     actualizarResumen();
+    
+    document.getElementById("form-idTamanio").value = select.value;
+    verificarBoton();
 }
 
 function actualizarTexto(textarea) {
@@ -248,4 +252,10 @@ function enviarDisenoAlCarrito() {
     console.log('Texto: ' + textoPlaca);
     console.log('Foto: ' + fotoNombre);
 
+}
+
+function verificarBoton() {
+    const mat = document.getElementById("form-idMaterial").value;
+    const tam = document.getElementById("form-idTamanio").value;
+    document.getElementById("btn-carrito").disabled = !(mat && tam);
 }

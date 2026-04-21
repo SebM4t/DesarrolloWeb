@@ -143,9 +143,14 @@
                                 </div>
                             </div>
                             <div class="card-footer bg-white border-0 p-3">
-                                <button type="button" id="btn-carrito" class="btn btn-success w-100 fw-bold py-2" disabled onclick="enviarDisenoAlCarrito()">
-                                    <i class="fas fa-cart-plus me-2"></i>ENVIAR AL CARRITO
-                                </button>
+                                <form method="POST" th:action="@{/carro/agregarDiseño}">
+                                    <input type="hidden" id="form-idMaterial" name="idMaterial" value=""/>
+                                    <input type="hidden" id="form-idTamanio" name="idTamanio" value=""/>
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                    <button type="submit" id="btn-carrito" class="btn btn-success w-100 fw-bold py-2" disabled>
+                                        <i class="fas fa-cart-plus me-2"></i>ENVIAR AL CARRITO
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>

@@ -58,7 +58,7 @@ public class CarroService {
         }
 
         Optional<Item> itemExistente = carro.stream()
-                .filter(i -> i.getPlaca().getIdPlaca().equals(idPlaca))
+                .filter(i -> i.getPlaca() != null && i.getPlaca().getIdPlaca().equals(idPlaca))
                 .findFirst();
 
         if (!itemExistente.isPresent()) {
@@ -80,7 +80,8 @@ public class CarroService {
                 .orElseThrow(() -> new RuntimeException("Tamaño no encontrado."));
 
         Optional<Item> itemExistente = carro.stream()
-                .filter(i -> i.getMaterial().getIdMaterial().equals(idMaterial)
+                .filter(i -> i.getMaterial() != null && i.getTamanio() != null
+                && i.getMaterial().getIdMaterial().equals(idMaterial)
                 && i.getTamanio().getIdTamanio().equals(idTamanio))
                 .findFirst();
 
