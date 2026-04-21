@@ -25,7 +25,6 @@ public class FirebaseStorageService {
     private String bucketName;
     @Value("${firebase.storage.path}")
     private String storagePath;
-    // Aquí se manejaría la inyección del cliente de Storage como un bean
     private final Storage storage;
 
     public FirebaseStorageService(Storage storage) {
