@@ -5,7 +5,7 @@
         <div class="col-md-8 px-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="fw-bold mb-0" style="border-left: 5px solid #E2B844; padding-left: 15px;">NUESTROS TRABAJOS</h2>
-                <button sec:authorize="hasAuthority('ADMIN')" type="button" 
+                <button sec:authorize="hasRole('ADMIN')" type="button" 
                         class="btn btn-warning fw-bold shadow-sm" 
                         data-bs-toggle="modal" data-bs-target="#modalAgregarGaleria">
                     <i class="fas fa-plus"></i> Nueva Placa
@@ -30,13 +30,16 @@
                 <div class="col" th:each="p : ${placas}">
                     <div class="card h-100 shadow-sm border-0 text-center">
                         <div class="p-2 bg-light d-flex justify-content-center align-items-center" style="height: 180px;">
-                            <img th:src="${p.imagenNombre}" class="img-fluid rounded" style="max-height: 100%; object-fit: contain;">
+                            <img th:src="${p.imagenNombre != null && !p.imagenNombre.isEmpty() 
+                                 ? p.imagenNombre 
+                                 : 'https://placehold.co/400x300?text=Sin+Imagen'}"
+                                 class="img-fluid rounded" style="max-height: 100%; object-fit: contain;">
                         </div>
                         <div class="card-body">
                             <h6 class="fw-bold text-uppercase" th:text="${p.nombre}"></h6>
                             <p class="text-muted small mb-1" th:text="${p.material}"></p>
                         </div>
-                        <div class="card-footer bg-white border-0 pb-3" sec:authorize="hasAuthority('ADMIN')">
+                        <div class="card-footer bg-white border-0 pb-3" sec:authorize="hasRole('ADMIN')">
                             <div class="d-flex justify-content-center gap-2">
                                 <a th:href="@{'/galeria/modificar/' + ${p.idPlaca}}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
                                 <button type="button" class="btn btn-sm btn-danger" 

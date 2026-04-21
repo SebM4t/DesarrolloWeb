@@ -37,8 +37,17 @@
                         <li class="nav-item"><a class="nav-link" th:href="@{/mascotas}">Mascotas</a></li>
                         <li class="nav-item"><a class="nav-link" th:href="@{/funciones}">Funciones</a></li>
                         <li class="nav-item"><a class="nav-link" th:href="@{/faq}">FAQ</a></li>
-                        <li class="nav-item"><a class="nav-link" th:href="@{/soporte}">Soporte</a></li>
-
+                        <li class="nav-item"><a class="nav-link" th:href="@{/soporte}" sec:authorize="isAuthenticated()">Soporte</a></li>
+                        <li class="submenu submenu-md dropend" sec:authorize="hasRole('USER')">
+                            <a class="dropdown-item dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                               onclick="event.stopPropagation();">Mantenimiento
+                            </a>
+                            <ul class="dropdown-menu">                                            
+                                <li><a class="dropdown-item" th:href="@{/usuario/listado}">Usuarios</a></li>
+                                <li><a class="dropdown-item" th:href="@{/usuario_rol/mantenimiento}">Permisos</a></li>
+                                <li><a class="dropdown-item" th:href="@{/constante/listado}">Constantes</a></li>
+                            </ul>
+                        </li>
                     </ul>
 
                     <ul class="navbar-nav ms-auto">
@@ -98,8 +107,8 @@
                         </li>
 
                         <li class="nav-item" sec:authorize="isAuthenticated()">
-                            <a class="nav-link" th:href="@{/carrito}">
-                                <i class="fa-solid fa-cart-shopping"></i> Carrito
+                            <a class="nav-link" th:href="@{/carro}">
+                                <i class="fa-solid fa-cart-shopping"></i> Carro
                             </a>
                         </li>
                     </ul>

@@ -9,6 +9,6 @@ import java.util.List;
 public interface MaterialRepository extends JpaRepository<Material, Integer> {
     
     List<Material> findByNombre(String nombre);
-    
+        
     List<Material> findAllByOrderByNombreAsc();
 }

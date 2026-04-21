@@ -1,71 +1,71 @@
 <!DOCTYPE html>
 
-        <section th:fragment="agregar">
-            <div class='row py-4 mb-4' sec:authorize="hasAuthority('ADMIN')">
-                <div class='col-md-12 text-center'>
-                    <button type="button" class="btn btn-warning shadow-sm fw-bold" 
-                            data-bs-toggle="modal" data-bs-target="#agregarProductoModal">
-                        <i class="fa-solid fa-plus"></i> Añadir Nuevo al Catálogo
-                    </button>
-                </div>
-            </div>
+<section th:fragment="agregar">
+    <div class='row py-4 mb-4' sec:authorize="hasRole('ADMIN')">
+        <div class='col-md-12 text-center'>
+            <button type="button" class="btn btn-warning shadow-sm fw-bold" 
+                    data-bs-toggle="modal" data-bs-target="#agregarProductoModal">
+                <i class="fa-solid fa-plus"></i> Añadir Nuevo al Catálogo
+            </button>
+        </div>
+    </div>
 
-            <div class="modal fade" id="agregarProductoModal" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header bg-dark text-white">
-                            <h5 class="modal-title">Nuevo Producto</h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+    <div class="modal fade" id="agregarProductoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title">Nuevo Producto</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form th:action='@{/placa/guardar}' th:object='${placa}' 
+                      class='was-validated' enctype="multipart/form-data" method="post">
+                    <div class="modal-body">
+                        <div class='mb-3'>
+                            <label class="fw-bold">Tipo de Categoría</label>
+                            <select name="categoria.idCategoria" class="form-select" required>
+                                <option th:each="c : ${categorias}" th:value="${c.idCategoria}">[[${c.descripcion}]]</option>
+                            </select>
                         </div>
-                        <form th:action='@{/placa/guardar}' th:object='${placa}' 
-                              class='was-validated' enctype="multipart/form-data" method="post">
-                            <div class="modal-body">
-                                <div class='mb-3'>
-                                    <label class="fw-bold">Tipo de Categoría</label>
-                                    <select name="categoria.idCategoria" class="form-select" required>
-                                        <option th:each="c : ${categorias}" th:value="${c.idCategoria}">[[${c.descripcion}]]</option>
-                                    </select>
-                                </div>
-                                <div class='mb-3'>
-                                    <label class="fw-bold">Nombre</label>
-                                    <input type="text" name='nombre' class='form-control' required/>
-                                </div>
-                                <div class='mb-3'>
-                                    <label class="fw-bold">Precio (₡)</label>
-                                    <input type="number" name='precio' class='form-control' required/>
-                                </div>
-                                <div class='mb-3'>
-                                    <label class="fw-bold">Material / Detalle</label>
-                                    <input type="text" name='material' class='form-control' required/>
-                                </div>
-                                
-                                <div class="modal-body">
-                                    <div class='mb-3'>
-                                        <label class="fw-bold">Descripción</label>
-                                        <textarea name='descripcion' class='form-control' required placeholder="Breve descripción..."></textarea>
-                                    </div>
+                        <div class='mb-3'>
+                            <label class="fw-bold">Nombre</label>
+                            <input type="text" name='nombre' class='form-control' required/>
+                        </div>
+                        <div class='mb-3'>
+                            <label class="fw-bold">Precio (₡)</label>
+                            <input type="number" name='precio' class='form-control' required/>
+                        </div>
+                        <div class='mb-3'>
+                            <label class="fw-bold">Material / Detalle</label>
+                            <input type="text" name='material' class='form-control' required/>
+                        </div>
 
-                                    <div class='mb-3'>
-                                        <label class="fw-bold">Tamaño (Dimensiones)</label>
-                                        <input type="text" name='tamanio' class='form-control' required placeholder="Ej: 20x30 cm"/>
-                                    </div>
+                        <div class="modal-body">
+                            <div class='mb-3'>
+                                <label class="fw-bold">Descripción</label>
+                                <textarea name='descripcion' class='form-control' required placeholder="Breve descripción..."></textarea>
+                            </div>
 
-                                    <input type="hidden" name="disponible" value="true" />
-                                    
-                                    <div class='mb-3'>
-                                        <label class="fw-bold">Imagen</label>
-                                        <input type="file" name='imagenFile' class='form-control' onchange="mostrarImagen(this);"/>
-                                        <img id='blah' src='#' alt='vista previa' height="200" class="mt-2" style="display:none;"/>
-                                    </div>
+                            <div class='mb-3'>
+                                <label class="fw-bold">Tamaño (Dimensiones)</label>
+                                <input type="text" name='tamanio' class='form-control' required placeholder="Ej: 20x30 cm"/>
                             </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-success w-100">Guardar en Catálogo</button>
+
+                            <input type="hidden" name="disponible" value="true" />
+
+                            <div class='mb-3'>
+                                <label class="fw-bold">Imagen</label>
+                                <input type="file" name='imagenFile' class='form-control' onchange="mostrarImagen(this);"/>
+                                <img id='blah' src='#' alt='vista previa' height="200" class="mt-2" style="display:none;"/>
                             </div>
-                        </form>
-                    </div>
-                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success w-100">Guardar en Catálogo</button>
+                        </div>
+                </form>
             </div>
-        </section>
+        </div>
+    </div>
+</section>
 
 <section th:fragment="catalogoProducto">
     <div class="container mt-4">
@@ -88,8 +88,8 @@
                             <div class="card-footer bg-white border-0">
                                 <a th:href="@{'/placa/detalle/' + ${p.idPlaca}}" class="btn btn-sm btn-outline-dark w-100 mb-2">Ver detalle</a>
 
-                               
-                                <div class="d-flex justify-content-center gap-1 mt-1" sec:authorize="hasAuthority('ADMIN')">
+
+                                <div class="d-flex justify-content-center gap-1 mt-1" sec:authorize="hasRole('ADMIN')">
                                     <a th:href="@{'/placa/modificar/' + ${p.idPlaca}}" class="btn btn-warning btn-sm py-0 px-2">
                                         <i class="fas fa-edit fa-xs"></i>
                                     </a>
@@ -122,7 +122,7 @@
                                 <p class="text-muted mb-1" style="font-size: 0.75rem;" th:text="${trofeo.material}"></p>
                                 <span class="text-success fw-bold">₡[[${#numbers.formatInteger(trofeo.precio, 0, 'POINT')}]]</span>
                                 <a th:href="@{'/placa/detalle/' + ${trofeo.idPlaca}}" class="btn btn-sm btn-outline-dark w-100 mb-2">Ver detalle</a>
-                                <div class="d-flex justify-content-center gap-1 mt-1" sec:authorize="hasAuthority('ADMIN')">
+                                <div class="d-flex justify-content-center gap-1 mt-1" sec:authorize="hasRole('ADMIN')">
                                     <a th:href="@{'/placa/modificar/' + ${trofeo.idPlaca}}" class="btn btn-sm btn-warning py-0 px-1">
                                         <i class="fas fa-edit fa-xs"></i>
                                     </a>
@@ -143,62 +143,62 @@
     <div th:replace="~{catalogo/fragmentos :: confirmarEliminar}"></div>
 </section>
 
-        <section th:fragment="modifica">
-            <div class="container py-5">
-                <div class="card shadow-lg mx-auto" style="max-width: 500px;">
-                    <div class="card-header bg-dark text-white text-center">
-                        <h4>Modificar Producto</h4>
-                    </div>
-                    <form th:action="@{/placa/guardar}" th:object="${placa}" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" th:field="*{idPlaca}" />
-                        <input type="hidden" th:field="*{disponible}" />
-                        <input type="hidden" name="categoria.idCategoria" th:value="${placa.categoria.idCategoria}" />
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Nombre</label>
-                            <input type="text" th:field="*{nombre}" class="form-control" required />
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Material</label>
-                            <input type="text" th:field="*{material}" class="form-control" required />
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Precio</label>
-                            <input type="number" th:field="*{precio}" class="form-control" required />
-                        </div>
-                        
-                        <div class='mb-3'>
-                            <label class="fw-bold">Descripción</label>
-                            <textarea th:field="*{descripcion}" class='form-control' required></textarea>
-                        </div>
-
-                        <div class='mb-3'>
-                            <label class="fw-bold">Tamaño (Dimensiones)</label>
-                            <input type="text" th:field="*{tamanio}" class='form-control' required />
-                        </div>
-                        
-                        <div class="mb-3 text-center">
-                            <img th:src="*{imagenNombre}" height="150" class="mb-2 rounded border" />
-                            <input type="file" name="imagenFile" class="form-control" />
-                        </div>
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-success">Guardar Cambios</button>
-                            <a th:href="@{/placa/catalogo}" class="btn btn-secondary">Cancelar</a>
-                        </div>
-                    </form>
-                </div>
+<section th:fragment="modifica">
+    <div class="container py-5">
+        <div class="card shadow-lg mx-auto" style="max-width: 500px;">
+            <div class="card-header bg-dark text-white text-center">
+                <h4>Modificar Producto</h4>
             </div>
-        </section>
+            <form th:action="@{/placa/guardar}" th:object="${placa}" method="POST" enctype="multipart/form-data">
+                <input type="hidden" th:field="*{idPlaca}" />
+                <input type="hidden" th:field="*{disponible}" />
+                <input type="hidden" name="categoria.idCategoria" th:value="${placa.categoria.idCategoria}" />
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Nombre</label>
+                    <input type="text" th:field="*{nombre}" class="form-control" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Material</label>
+                    <input type="text" th:field="*{material}" class="form-control" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Precio</label>
+                    <input type="number" th:field="*{precio}" class="form-control" required />
+                </div>
+
+                <div class='mb-3'>
+                    <label class="fw-bold">Descripción</label>
+                    <textarea th:field="*{descripcion}" class='form-control' required></textarea>
+                </div>
+
+                <div class='mb-3'>
+                    <label class="fw-bold">Tamaño (Dimensiones)</label>
+                    <input type="text" th:field="*{tamanio}" class='form-control' required />
+                </div>
+
+                <div class="mb-3 text-center">
+                    <img th:src="*{imagenNombre}" height="150" class="mb-2 rounded border" />
+                    <input type="file" name="imagenFile" class="form-control" />
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                    <a th:href="@{/placa/catalogo}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
 
 <section th:fragment="confirmarEliminar">
     <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <form th:action="@{/placa/eliminar}" method="post">
-                    
+
                     <input type="hidden" name="idPlaca" id="modalId" value=""/>
-                    
+
                     <div class="modal-header bg-warning text-dark">
                         <h5 class="modal-title">Confirmar Acción</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -216,25 +216,28 @@
     </div>
 </section>
 
-        <section th:fragment="detalleProducto">
-            <div class="container mt-5 p-5 bg-warning rounded">
-                <h2 class="text-center mb-4">DETALLE DEL PRODUCTO</h2>
-                <div class="row">
-                    <div class="col-md-6 text-center">
-                        <img th:src="${placa.imagenNombre != null ? placa.imagenNombre : 'https://placehold.co/600x400'}" class="img-fluid rounded shadow" alt="Placa"/>
-                    </div>
-                    <div class="col-md-6">
-                        <h3 th:text="${placa.nombre}">Nombre</h3>
-                        <p class="h4 fw-bold" th:text="'₡' + ${placa.precio}">Precio</p>
-                        <h5 class="mt-4">Características</h5>
-                        <p><strong>Material:</strong> <span th:text="${placa.material}"></span></p>
-                        <h5 class="mt-4">Tamaño</h5>
-                        <h3 th:text="${placa.tamanio}">Tamanio</h3>
-                        <div class="mt-4">
-                            <button class="btn btn-success">AÑADIR AL CARRITO</button>
-                            <a th:href="@{/placa/catalogo}" class="btn btn-danger">REGRESAR</a>
-                        </div>
-                    </div>
+<section th:fragment="detalleProducto">
+    <div class="container mt-5 p-5 bg-warning rounded">
+        <h2 class="text-center mb-4">DETALLE DEL PRODUCTO</h2>
+        <div class="row">
+            <div class="col-md-6 text-center">
+                <img th:src="${placa.imagenNombre != null ? placa.imagenNombre : 'https://placehold.co/600x400'}" class="img-fluid rounded shadow" alt="Placa"/>
+            </div>
+            <div class="col-md-6">
+                <h3 th:text="${placa.nombre}">Nombre</h3>
+                <p class="h4 fw-bold" th:text="'₡' + ${placa.precio}">Precio</p>
+                <h5 class="mt-4">Características</h5>
+                <p><strong>Material:</strong> <span th:text="${placa.material}"></span></p>
+                <h5 class="mt-4">Tamaño</h5>
+                <h3 th:text="${placa.tamanio}">Tamanio</h3>
+                <div class="mt-4">
+                    <form th:action="@{/carro/agregarPlaca}" method="post">
+                        <input type="hidden" name="idPlaca" th:value="${placa.idPlaca}" />
+                        <button type="submit" class="btn btn-success">AÑADIR AL CARRITO</button>
+                    </form>
+                    <a th:href="@{/placa/catalogo}" class="btn btn-danger">REGRESAR</a>
                 </div>
             </div>
-        </section>
+        </div>
+    </div>
+</section>

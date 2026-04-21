@@ -19,7 +19,7 @@
                             <div class="card-header bg-warning text-dark fw-bold d-flex justify-content-between align-items-center">
                                 <span><i class="fas fa-layer-group me-2"></i>Paso 1 — Seleccioná el Material</span>
 
-                                <div sec:authorize="hasAuthority('ADMIN')" class="btn-group">
+                                <div sec:authorize="hasRole('ADMIN')" class="btn-group">
                                     <a th:href="@{/material/nuevo}" class="btn btn-sm btn-dark">
                                         <i class="fas fa-plus"></i>
                                     </a>
@@ -51,7 +51,7 @@
                             <div class="card-header bg-warning text-dark fw-bold d-flex justify-content-between align-items-center">
                                 <span><i class="fas fa-ruler-combined me-2"></i>Paso 2 — Seleccioná el Tamaño</span>
 
-                                <div sec:authorize="hasAuthority('ADMIN')" class="btn-group">
+                                <div sec:authorize="hasRole('ADMIN')" class="btn-group">
                                     <a th:href="@{/tamanio/nuevo}" class="btn btn-sm btn-dark">
                                         <i class="fas fa-plus"></i>
                                     </a>

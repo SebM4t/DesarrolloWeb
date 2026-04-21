@@ -288,4 +288,3 @@ SELECT * FROM material;
 
 SELECT nombre, imagen_nombre FROM placa;
 
-SELECT * from usuario_rol;
