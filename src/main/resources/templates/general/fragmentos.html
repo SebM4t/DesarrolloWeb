@@ -30,18 +30,18 @@
 
                 <div class="collapse navbar-collapse" id="navbarMenu">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-flex gap-3">
-                        <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
-                        <li class="nav-item"><a class="nav-link" th:href="@{/placa/catalogo}">Catálogo</a></li>
-                        <li class="nav-item"><a class="nav-link" th:href="@{/disenar}">Diseñar</a></li>
-                        <li class="nav-item"><a class="nav-link" th:href="@{/galeria/listado}">Galería</a></li>
-                        <li class="nav-item"><a class="nav-link" th:href="@{/empresas}">Empresas</a></li>
-                        <li class="nav-item"><a class="nav-link" th:href="@{/mascotas}">Mascotas</a></li>
-                        <li class="nav-item"><a class="nav-link" th:href="@{/funciones}">Funciones</a></li>
-                        <li class="nav-item"><a class="nav-link" th:href="@{/faq}">FAQ</a></li>
-                        <li class="nav-item"><a class="nav-link" th:href="@{/soporte}" sec:authorize="isAuthenticated()">Soporte</a></li>
-                        <li class="submenu submenu-md dropend" sec:authorize="hasRole('ADMIN')">
+                        <li class="nav-item"><a class="nav-link" th:href="@{/}">[[#{plantilla.inicio}]]</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/placa/catalogo}">[[#{plantilla.catalogo}]]</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/disenar}">[[#{plantilla.disenar}]]</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/galeria/listado}">[[#{plantilla.galeria}]]</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/empresas}">[[#{plantilla.empresas}]]</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/mascotas}">[[#{plantilla.mascotas}]]</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/funciones}">[[#{plantilla.funciones}]]</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/faq}">[[#{plantilla.faq}]]</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/soporte}" sec:authorize="isAuthenticated()">[[#{plantilla.soporte}]]</a></li>
+                        <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
                             <a class="dropdown-item dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false"
-                               onclick="event.stopPropagation();">Mantenimiento
+                               onclick="event.stopPropagation();">[[#{plantilla.mantenimiento}]]
                             </a>
                             <ul class="dropdown-menu">                                            
                                 <li><a class="dropdown-item" th:href="@{/usuario/listado}">Usuarios</a></li>
@@ -49,6 +49,17 @@
                                 <li><a class="dropdown-item" th:href="@{/constante/listado}">Constantes</a></li>
                             </ul>
                         </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                                [[#{plantilla.idioma}]]</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" th:href="@{/(lang=es)}">Español</a></li>
+                                <li><a class="dropdown-item" th:href="@{/(lang=en)}">English</a></li>
+                                <li><a class="dropdown-item" th:href="@{/(lang=fr)}">Française</a></li>
+                                <li><a class="dropdown-item" th:href="@{/(lang=pt)}">Portugaise</a></li>
+                            </ul>
+                        </li>
+                        
                     </ul>
 
                     <ul class="navbar-nav ms-auto">
