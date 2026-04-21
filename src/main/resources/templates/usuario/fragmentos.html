@@ -4,8 +4,8 @@
     <!-- Button trigger modal -->
     <div class='row py-4 mb-2 bg-light'>
         <div class='col-md-1'></div>
-        <div class='col-md-3'  sec:authorize="hasRole('ROLE_ADMIN')">
-            <button type="button" class="btn btn-primary"  sec:authorize="hasRole('ROLE_ADMIN')"
+        <div class='col-md-3'  sec:authorize="hasAuthority('ADMIN')">
+            <button type="button" class="btn btn-primary"  sec:authorize="hasAuthority('ADMIN')"
                     data-bs-toggle="modal" data-bs-target="#agregarUsuarioModal">
                 <i class="fa-solid fa-plus"></i> [[#{usuario.agregar}]]</button>
         </div>
@@ -81,46 +81,46 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>[[#{usuario.apellidos}]]</th>
                                     <th>[[#{usuario.nombre}]]</th>
+                                    <th>[[#{usuario.apellidos}]]</th>
+                                    <th>[[#{usuario.telefono}]]</th>
+                                    <th>[[#{usuario.correo}]]</th>
                                     <th>[[#{usuario.imagen}]]</th>
                                     <th>[[#{usuario.activo}]]</th>
-                                    <th sec:authorize="hasRole('ROLE_ADMIN')"></th>
+                                    <th sec:authorize="hasAuthority('ADMIN')"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr th:each="u : ${usuarios}">
                                     <td>[[${u.idUsuario}]]</td>
-                                    <td>[[${u.apellidos}]]</td>
                                     <td>[[${u.nombre}]]</td>
+                                    <td>[[${u.apellidos}]]</td>
+                                    <td>[[${u.telefono}]]</td>
+                                    <td>[[${u.correo}]]</td>
                                     <td><img th:src="@{${u.rutaImagen}}" alt="noData" height="75"/></td>
                                     <td th:text="${u.activo} ? 'Activa':'Inactiva'"></td>
-                                    <td  sec:authorize="hasRole('ROLE_ADMIN')">
-                                        <button type="button" class="btn btn-danger"
-                                                data-bs-toggle="modal" data-bs-target="#confirmModal"
-                                                th:data-bs-id="${u.idUsuario}"
-                                                th:data-bs-descripcion="${u.nombre} + ${u.apellidos}">
-                                            <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]
-                                        </button>                                           
+                                    <td  sec:authorize="hasAuthority('ADMIN')">
+                                        <form th:action="@{/usuario/eliminar(idUsuario=${u.idUsuario})}" method="post" 
+                                              onsubmit="return confirm('¿Está seguro de eliminar este usuario?')">
+                                            <button type="submit" class="btn btn-danger">
+                                                <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                                            </button>
+                                        </form>                                           
                                         <a th:href="@{/usuario/modificar/}+${u.idUsuario}" class="btn btn-warning">
                                             <i class="fas fa-pencil-alt"></i> [[#{accion.actualizar}]]
                                         </a>                                                
                                     </td>
                                 </tr>
                             </tbody>
-                        </table></div>
+                        </table>
+                    </div>
                     <div class="text-center p-2" th:if="${usuarios == null or usuarios.empty}">
                         <span>[[#{lista.vacia}]]</span></div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-center bg-success text-white mb-3">
-                <div class="card-body"><h3>[[#{usuario.total}]]</h3>
-                    <h4 class="fs-2"><i class="fas fa-layer-group"></i> [[${totalUsuarios}]]</h4>
-                </div></div>
-        </div>
     </div>
+    <div th:replace="~{usuario/fragmentos :: confirmarEliminar}"></div>
 </section>
 
 <!-- 3 Fragmento que se utiliza en la página modifca.html -->
@@ -208,32 +208,23 @@
 
 <!-- 4 fragmento que se utiliza para confirmar que se desea eliminar una usuario -->
 <section th:fragment="confirmarEliminar">
-    <div class="modal fade" 
-         id="confirmModal" 
-         tabindex="-1" 
-         aria-labelledby="modalLabel" 
-         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered custom-modal-animation">
-            <div class="modal-content animate-slide-up">
-                <form th:action="@{/usuario/eliminar}" th:object="${usuario}" method="post">
-                    <input type="hidden" name="idUsuario" id="modalId"/>
-                    <div class="modal-header bg-warning text-white">
-                        <h5 class="modal-title" id="modalLabel">
-                            <i class="fa-solid fa-circle-radiation"></i> [[#{accion.confirmar}]]
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form th:action="@{/usuario/eliminar}" method="post">
+
+                    <input type="hidden" name="idUsuario" id="modalId" value=""/>
+
+                    <div class="modal-header bg-warning text-dark">
+                        <h5 class="modal-title">Confirmar Acción</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <p>[[#{accion.confirmar.texto1}]] <span id="modalDescripcion"></span>?</p>
-                        <h6>[[#{accion.confirmar.texto2}]]</h6>
+                        <p>¿Seguro que quieres eliminar el mensaje?</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-danger">
-                            <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]
-                        </button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            <i class="fa-solid fa-xmark"></i> [[#{accion.cerrar}]]
-                        </button>
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </form>
             </div>

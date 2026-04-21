@@ -1,0 +1,231 @@
+
+<!-- Fragmento 2, muestra el listado de placas del carro de compras -->
+<section th:fragment="listadoCarro" id="items">          
+    <div class="container mt-5">
+        <div class="row mb-4">
+            <h2 class="fw-bold text-center">Carro de compras | Resumen de pedido</h2>
+        </div>
+
+        <div class="col-md-11">
+            <div class="card">
+                <div th:if="${carroItems != null and !carroItems.empty}" style="background-color: #E2B844;">
+                    <table class="table table-striped table-hover">
+                        <thead class="thead-dark">
+                            <tr style="background-color: #E2B844;">
+                                <th style="background-color: #E2B844;">#</th>
+                                <th style="background-color: #E2B844;">Nombre</th>
+                                <th style="background-color: #E2B844;">Descripcion</th>
+                                <th style="background-color: #E2B844;">Precio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="item : ${carroItems}">
+                                <td>[[${item.placa.idPlaca}]]</td>
+                                <td>[[${item.placa.nombre}]]</td>
+                                <td>[[${item.placa.descripcion}]]</td>
+                                <td class="text-end">[[${#numbers.formatCurrency(item.precioHistorico)}]]</td>
+                                <td class="ps-6">
+                                    <form th:action="@{/carro/eliminar/{id}(id=${item.placa.idPlaca})}" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class='fas fa-trash'></i> [[#{accion.eliminar}]]
+                                        </button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <a th:href="@{/carro/modificar/{id}(id=${item.placa.idPlaca})}" class="btn btn-warning">
+
+                                        <i class='fas fa-pencil'></i> [[#{accion.actualizar}]]
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-center p-2" th:if="${carroItems== null or carroItems.empty}" style="background-color: #E2B844;">
+                    [[#{carro.no_mostrar}]]
+                </div>
+            </div>
+
+            <div class="py-4"></div> 
+
+            <hr class="opacity-25 mb-4 w-100">
+
+            <div class="row mt-5 mb-4 align-items-center">
+                <div class="col-6 d-flex align-items-center">
+                    <h4 class="fw-bold me-3">TOTAL: </h4>
+                    <h4 class="fw-normal">[[${#numbers.formatCurrency(totalCarro)}]]</h4>
+                </div>
+
+                <div class="col-6 text-end">
+                    <a th:href="@{/carro/facturar/carro}" class="btn fw-bold rounded-pill px-4 py-2 shadow-sm" style="background-color: #E2B844; border-radius: 10px;">
+                        <i class="fas fa-credit-card me-2"></i> PAGO CON TARJETA
+                    </a>
+                </div>
+            </div>  
+        </div> 
+    </div> 
+</section>
+
+
+<!-- Fragmento 3, muestra la información de un item del carro de compras, sólo se puede modificar la cantidad o eliminarlo completamente -->
+<section th:fragment="modificaItem" class="container py-4">
+    <div class="row mb-3">
+        <div class="col-12">
+            <a th:href="@{/carro/listado}" class="btn btn-primary">
+                <i class='fas fa-reply'></i> [[#{accion.regresar}]]
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-lg mx-auto" style="max-width: 800px;">
+        <div class="card-body">
+            <h4 class="card-title mb-4">[[#{accion.actualizar}]]</h4>
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center mb-3 mb-md-0">
+                    <figure>
+                        <img th:src="@{${item.placa.imagenNombre}}" 
+                             width="150" 
+                             alt="Imagen de Placa" 
+                             class="rounded shadow-sm"/>
+                    </figure>
+                </div>
+                <div class="col-md-8">
+                    <h5 class="font-weight-bold" th:text="${item.placa.descripcion}">Nombre Placa</h5>
+                    <p class="text-muted small mb-1" th:text="${item.placa.detalle}">Detalle del Placa</p>
+                    <p class="text-info mb-3">
+                        [[#{placa.precio}]]: 
+                        <span th:text="${#numbers.formatCurrency(item.precioHistorico)}">$520.00</span>
+                        <span id="precioUnitario" 
+                              th:data-precio="${item.precioHistorico}" 
+                              style="display: none;">
+                        </span>
+                    </p>
+                    <form th:action="@{/carro/actualizar}"
+                          method="post"
+                          th:object="${item}"
+                          class="form-inline mb-4">
+                        <input type="hidden" name="idPlaca" th:field="*{placa.idPlaca}"/>
+                        <label class="mr-2">[[#{carro.cantidad}]]:</label>
+                        <div class="input-group input-group-sm mr-4" style="width: 130px;">
+                            <div class="input-group-prepend">
+                                <button type="button" class="btn btn-outline-secondary btn-sm" 
+                                        onclick="ajustarCantidad(this, -1)">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                            <input type="number" 
+                                   name="cantidad" 
+                                   th:field="*{cantidad}" 
+                                   min='1'
+                                   id="cantidadInput"
+                                   class="form-control text-center"
+                                   onchange="calcularSubtotalItem()" /> <div class="input-group-append"/>
+                            <button type="button" class="btn btn-outline-secondary btn-sm"
+                                    onclick="ajustarCantidad(this, 1)">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>                        
+                        <button class="btn btn-success btn-sm" type="submit" name="guardar">
+                            <i class='fas fa-save'></i> [[#{accion.guardar}]]
+                        </button>
+                    </form>
+                    <div class="alert alert-light text-right mb-4">
+                        <strong class="h5">[[#{carro.total}]]: 
+                            <span id="subtotalItemDisplay"
+                                  th:with="subtotal=${item.precioHistorico} * ${item.cantidad}"
+                                  th:text="${#numbers.formatCurrency(subtotal)}" 
+                                  class="text-success"></span>
+                        </strong>
+                    </div>
+                    <div class="text-right">
+                        <form th:action="@{/carro/eliminar/{id}(id=${item.placa.idPlaca})}" method="post">
+                            <button type="submit" 
+                                    class="btn btn-outline-danger btn-sm"
+                                    onclick="return confirm('¿Está seguro de que desea eliminar este placa del carro?');">
+                                <i class='fas fa-trash'></i> [[#{accion.eliminar}]]
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function formatAsCurrency(number) {
+            if (isNaN(number))
+                return "$0.00";
+            return new Intl.NumberFormat('es-CR', {// Ejemplo: Español de Costa Rica
+                style: 'currency',
+                currency: 'CRC' // Ejemplo: Colon Costarricense. Cambie a 'USD', 'EUR', etc.
+            }).format(number);
+        }
+    </script>
+</section>
+
+<!-- Fragmento 4, muestra la información general de la factura -->
+<section th:fragment="detalleFactura" class="container py-5">
+    <div class="card shadow-lg mx-auto" style="max-width: 900px;">
+        <div class="card-header bg-success text-white">
+            <h3 class="mb-0">[[#{factura.confirmacion}]]</h3>
+            <p th:if="${mensaje}" th:text="${mensaje}" class="mb-0"></p>
+        </div>
+
+        <div class="card-body">
+            <div class="row mb-4 border-bottom pb-3">
+                <div class="col-md-6">
+                    <h5>[[#{factura.detalles}]]</h5>
+                    <p><strong>[[#{factura.numero}]]:</strong> <span th:text="${factura.idFactura}"></span></p>
+                    <p><strong>[[#{factura.fecha}]]:</strong> <span th:text="${#temporals.format(factura.fecha, 'dd-MM-yyyy hh:mm')}"></span></p>
+                    <p><strong>[[#{factura.estado}]]:</strong> <span th:text="${factura.estado.valorBD}"></span></p>
+                </div>
+                <div class="col-md-6 text-md-right">
+                    <h5>[[#{factura.cliente}]]</h5>
+                    <p><strong>[[#{usuario.nombre}]]:</strong> <span th:text="${factura.usuario.nombre + ' ' + factura.usuario.apellidos}"></span></p>
+                    <p><strong>[[#{usuario.correo}]]:</strong> <span th:text="${factura.usuario.correo}"></span></p>
+                </div>
+            </div>
+
+            <h5>[[#{factura.placas.adquiridos}]]</h5>
+            <div class="table-responsive mb-4">
+                <table class="table table-bordered table-striped">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>[[#{placa.descripcion}]]</th>
+                            <th class="text-right">[[#{placa.precio}]]</th>
+                            <th class="text-right">[[#{carro.total}]]</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="venta, iterStat : ${factura.ventas}">
+                            <td th:text="${venta.placa.descripcion}"></td>
+                            <td class="text-end" th:text="${#numbers.formatCurrency(venta.precioHistorico)}"></td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-end"><strong>[[#{carro.totalCompra}]]:</strong></td>
+                            <td class="text-end text-success">
+                                <strong class="h5" th:text="${#numbers.formatCurrency(factura.total)}"></strong>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="text-center">
+                <a th:href="@{/}" class="btn btn-primary btn-lg d-print-none">
+                    <i class='fas fa-home'></i> [[#{accion.regresar}]]
+                </a>
+                <button onclick="window.print()" class="btn btn-primary btn-lg d-print-none">
+                    <i class='fas fa-print'></i> [[#{accion.imprimir}]]
+                </button>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+

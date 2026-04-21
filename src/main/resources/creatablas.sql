@@ -82,6 +82,55 @@ CREATE TABLE tamanio (
     precio_adicional DECIMAL(10,2) NOT NULL DEFAULT 0
 );
 
+CREATE TABLE soporte (
+    id_soporte INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_completo VARCHAR(60) NOT NULL,
+    telefono VARCHAR(25) NOT NULL,
+    correo VARCHAR(25) NOT NULL,
+    mensaje_soporte VARCHAR(250) NOT NULL
+);
+
+create table factura (
+  id_factura INT NOT NULL AUTO_INCREMENT,
+  id_usuario INT NOT NULL,
+  fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  
+  total decimal(12,2) check (total>0),
+  estado ENUM('Activa', 'Pagada', 'Anulada') NOT NULL,
+  fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id_factura),  
+  index ndx_id_usuario (id_usuario),
+  foreign key fk_factura_usuario (id_usuario) references usuario(id_usuario)
+);
+
+CREATE TABLE constante (
+    id_constante INT AUTO_INCREMENT NOT NULL,
+    atributo VARCHAR(25) NOT NULL,
+    valor VARCHAR(150) NOT NULL,
+  fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id_constante),
+    UNIQUE (atributo)
+);
+
+create table venta (
+  id_venta INT NOT NULL AUTO_INCREMENT,
+  id_factura INT NOT NULL,
+  id_placa INT NOT NULL,
+  id_material INT NOT NULL,
+  id_tamanio INT NOT NULL,
+  precio_historico decimal(12,2) check (precio_historico>= 0), 
+  cantidad int unsigned check (cantidad> 0),
+  fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id_venta),
+  index ndx_factura (id_factura),
+  index ndx_placa (id_placa),
+  UNIQUE (id_factura, id_placa),
+  foreign key fk_venta_factura (id_factura) references factura(id_factura),
+  foreign key fk_venta_placa (id_placa) references placa(id_placa)
+  );
+
 INSERT INTO categoria (id_categoria, nombre, descripcion) VALUES  
 (1, 'Placas Conmemorativas', 'Placas para homenajes y recuerdos'),
 (2, 'Trofeos y Reconocimientos', 'Trofeos para premiaciones y logros'),
@@ -142,7 +191,7 @@ INSERT INTO usuario (username, password, nombre, apellidos, correo, telefono, ru
 
 INSERT INTO rol (rol) VALUES ('ADMIN'), ('VENDEDOR'), ('USER');
 
-INSERT INTO usuario_rol (id_usuario, id_rol) VALUES (1,1), (1,2), (1,3), (2,2), (2,3), (3,3);
+INSERT INTO usuario_rol (id_usuario, id_rol) VALUES (1,1), (2,2), (2,3), (3,3);
 
 -- Rutas
 INSERT INTO ruta (ruta, requiere_rol) VALUES 
@@ -155,19 +204,21 @@ INSERT INTO ruta (ruta, requiere_rol) VALUES
 ('/faq/**', false),
 ('/soporte/**', false),
 ('/material/**',false),
-('/tamanio/**',false);
-
-INSERT INTO ruta (ruta,requiere_rol) VALUES 
-('/',false),
-('/index',false),
-('/errores/**',false),
-('/carrito/**',false),
-('/registro/**',false),
+('/tamanio/**',false),
+('/facturar/**',false),
+('/carro/**',false),
+('/paypal/**',false),
+('/mantenimiento/**',false),
+('/constante/**',false),
 ('/403',false),
 ('/fav/**',false),
 ('/js/**',false),
 ('/css/**',false),
-('/webjars/**',false);
+('/webjars/**',false),
+('/',false),
+('/index',false),
+('/errores/**',false),
+('/registro/**',false);
 
 INSERT INTO material (nombre, precio) VALUES
 ('Mármol Blanco',        40000.00),
@@ -204,6 +255,36 @@ INSERT INTO tamanio (dimensiones, precio_adicional) VALUES
 ('20x60 cm',   14000.00),
 ('30x90 cm',   28000.00);
 
+INSERT INTO soporte (nombre_completo, telefono, correo, mensaje_soporte) VALUE
+('Susana Ramirez', '70437656', 'susana@gmail.com', 'Buenas, me llegó una placa completamente diferente a la que pedí. Gracias.'),
+('Kevin Sanchez', '80348828', 'kevin@gmail.com', 'Buenas, tengo problemas con el carrito. No me deja pagar mi pedido. Gracias.');
+
+INSERT INTO factura (id_usuario,fecha,total,estado) VALUES
+(1,'2025-06-05',211560,'Pagada'),
+(2,'2025-06-07',554340,'Pagada'),
+(3,'2025-07-07',871000,'Pagada'),
+(1,'2025-07-15',244140,'Pagada'),
+(2,'2025-07-17',414800,'Pagada'),
+(3,'2025-07-21',420000,'Pagada');
+
+INSERT INTO constante (atributo,valor) VALUES 
+('dominio','localhost'),
+('dolar','520.75'),
+('paypal.client-id','AaDNEUcELb-wQi6_MOboN0a1Ug4BnD4Z2T2-_KIoDjIb8Rif6525nvRhDu-MS-YdKQ8PJqZi7R6T6e_k'),
+('paypal.client-secret','EKBpJ1oXlwfcp60KyF9ednFM4i9G_RkzgPCpDXo_NbQbaO_bICxhs_a_mnepi7524BQeK_qdNPRmLt71'),
+('paypal.mode','sandbox'),
+('url_paypal_cancel','http://localhost/payment/cancel'),
+('url_paypal_success','http://localhost/payment/success'),
+('servidor.http','http://localhost:8080'),
+('app.paypal.return-url','/paypal/order/capture'),
+('app.paypal.cancel-url','/paypal/pago_cancel'),
+('app.paypal.cancel-error','/paypal/pago_error'),
+('app.paypal.cancel-success','/paypal/pago_success');
+
+INSERT INTO venta (id_factura,id_placa,id_material, id_tamanio, precio_historico,cantidad) values
+(1,5,3,2,45000,3),
+(1,9,5,6,15780,2),
+(1,10,3,5,15000,3);
 
 -- Consultas finales
 SELECT * FROM usuario;
