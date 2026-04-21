@@ -1,5 +1,6 @@
 package com.DesarrolloWeb.demo.controller;
 
+
 import com.DesarrolloWeb.demo.domain.Usuario;
 import com.DesarrolloWeb.demo.service.RegistroService;
 import jakarta.mail.MessagingException;

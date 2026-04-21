@@ -16,60 +16,79 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    private final RutaService rutaService;
+private final RutaService rutaService;
 
     public SecurityConfig(RutaService rutaService) {
         this.rutaService = rutaService;
     }
 
-@Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) 
-            throws Exception {
-        var rutas = rutaService.getRutas();
+
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        var rutas = rutaService.getRutas(); //recupera la tabla de rutas completa
         http.authorizeHttpRequests(request -> {
-                
-                for (Ruta ruta : rutas) {
-                    if (ruta.isRequiereRol()){
-                        request.requestMatchers(ruta.getRuta()).hasRole(ruta.getRol().getRol());
-                    } else {
-                        request.requestMatchers(ruta.getRuta()).permitAll();
-                    }
+            for (Ruta ruta : rutas) {
+                if (ruta.isRequiereRol()) {
+                    request.requestMatchers(ruta.getRuta()).hasRole(ruta.getRol().getRol());
+                }else{
+                    request.requestMatchers(ruta.getRuta()).permitAll();
                 }
+            }
+        
                 request.anyRequest().authenticated();
-        });
-http.formLogin(form -> form
+        }
+        );
+        http.formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/",true)
-                .failureUrl("/login?error=true")
-                .permitAll()
+                .defaultSuccessUrl("/", true)
+                .failureUrl("/login?error=true").permitAll()
         ).logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout=true")
                 .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-                .permitAll()   
+                .deleteCookies("JSESSIONID").permitAll()
         ).exceptionHandling(ex -> ex.accessDeniedPage("/acceso_denegado")
-        ).sessionManagement(session -> session
-                .maximumSessions(1)
-                .maxSessionsPreventsLogin(false)
-  
+        ).sessionManagement(session -> session.maximumSessions(1).maxSessionsPreventsLogin(false)
         );
+
         return http.build();
-        
     }
-    
+
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
     
-    @Autowired
-    public void configurerGlobal(AuthenticationManagerBuilder build,
-            @Lazy PasswordEncoder passwordEncoder,
-            @Lazy UserDetailsService userDetailsService)
-            throws Exception {
-        build.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+//    @Bean
+//    public UserDetailsService users(PasswordEncoder passwordEncoder){
+//        UserDetails juan = User.builder()
+//                .username("andres")
+//                .password(passwordEncoder().encode("123"))
+//                .roles("ADMIN")
+//                .build();
+//        
+//        UserDetails rebeca = User.builder()
+//                .username("laura")
+//                .password(passwordEncoder().encode("456"))
+//                .roles("VENDEDOR")
+//                .build();
+//        
+//        UserDetails pedro = User.builder()
+//                .username("carlos")
+//                .password(passwordEncoder().encode("789"))
+//                .roles("USUARIO")
+//                .build();
+//        
+//        return new InMemoryUserDetailsManager(andres, laura, carlos);
+//    }
+@Autowired
+public void configurerGlobal(AuthenticationManagerBuilder build,
+        @Lazy PasswordEncoder passwordEncoder,
+        @Lazy UserDetailsService userDetailsService)
+        throws Exception {
+  build.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
-
+    
 }
