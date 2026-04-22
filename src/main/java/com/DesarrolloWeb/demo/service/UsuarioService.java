@@ -82,32 +82,25 @@ public class UsuarioService {
             }
         }
 
-        //Se valida si la clave se va actualizar o si es un usuario nuevo se debe actualizar...
         var asignarRol = false;
         if (usuario.getIdUsuario() == null) {
             if (usuario.getPassword() == null || usuario.getPassword().isBlank()) {
                 throw new IllegalArgumentException("La contraseña es obligatoria para nuevos usuarios.");
             }
-            //La primera vez como es activación no se encripta...
             usuario.setPassword(encriptaClave ? passwordEncoder.encode(usuario.getPassword()) : usuario.getPassword());
             asignarRol = true;
         } else {
             if (usuario.getPassword() == null || usuario.getPassword().isBlank()) {
-                // El campo de password en el formulario viene vacío (no se desea actualizar).
-                // Recuperamos la contraseña HASHED existente de la base de datos.
                 Usuario usuarioExistente = usuarioRepository.findById(usuario.getIdUsuario())
                         .orElseThrow(() -> new IllegalArgumentException("Usuario a modificar no encontrado."));
-
-                // Asignamos la contraseña existente al objeto "usuario" antes de guardarlo.                
+               
                 usuario.setPassword(usuarioExistente.getPassword());
             } else {
-                // El campo de password NO está vacío (se desea actualizar).
-                // Se encripta y se guarda la nueva contraseña.
                 usuario.setPassword(encriptaClave ? passwordEncoder.encode(usuario.getPassword()) : usuario.getPassword());
             }
         }
         usuario = usuarioRepository.save(usuario);
-        if (imagenFile != null && !imagenFile.isEmpty()) { //Si no está vacío... pasaron una imagen...            
+        if (imagenFile != null && !imagenFile.isEmpty()) {           
             try {
                 String rutaImagen = firebaseStorageService.uploadImage(
                         imagenFile, "usuario", usuario.getIdUsuario());
@@ -117,23 +110,19 @@ public class UsuarioService {
             }
         }
         if (asignarRol) {
-            //Si se está creando el usuario, se crea el rol por defecto "USER"
             asignarRolPorUsername(usuario.getUsername(), "USER");
         }
     }
 
     @Transactional
     public void delete(Integer idUsuario) {
-        // Verifica si la categoría existe antes de intentar eliminarlo
         if (!usuarioRepository.existsById(idUsuario)) {
-            // Lanza una excepción para indicar que el usuario no fue encontrado
             throw new IllegalArgumentException(
                     "El usuario con ID " + idUsuario + " no existe.");
         }
         try {
             usuarioRepository.deleteById(idUsuario);
         } catch (DataIntegrityViolationException e) {
-            // Excepción para encapsular el problema de integridad de datos
             throw new IllegalStateException(
                     "No se puede eliminar el usuario. Tiene datos asociados.", e);
         }
@@ -155,10 +144,8 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    //Sección para gestionar roles a usuarios...
     @Transactional(readOnly = true)
     public List<String> getRolesNombres() {
-        // Retorna una lista de Strings con el nombre de cada rol
         return rolRepository.findAll().stream()
                 .map(Rol::getRol)
                 .toList();
@@ -172,10 +159,8 @@ public class UsuarioService {
         }
         Usuario usuario = usuarioOpt.get();
 
-        // Filtra la colección de roles del usuario para mantener solo los que NO coinciden con idRol
         usuario.getRoles().removeIf(rol -> rol.getIdRol().equals(idRol));
 
-        // Guarda el usuario con la colección de roles modificada
         return usuarioRepository.save(usuario);
     }
 }

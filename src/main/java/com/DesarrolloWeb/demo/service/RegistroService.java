@@ -25,19 +25,17 @@ public class RegistroService {
         this.messageSource = messageSource;
     }
 
-    //Este método se usa en el enlace del correo enviado...
     public Model activar(Model model, String username, String clave) {
         Optional<Usuario> usuario = usuarioService.getUsuarioPorUsernameYPassword(username, clave);
-        if (!usuario.isEmpty()) {  //Si estaba...
+        if (!usuario.isEmpty()) { 
             model.addAttribute("usuario", usuario.get());
-        } else { //hay que devolver error
+        } else {
             model.addAttribute("titulo", messageSource.getMessage("registro.activar", null, Locale.getDefault()));
             model.addAttribute("mensaje", messageSource.getMessage("registro.activar.error", null, Locale.getDefault()));
         }
         return model;
     }
 
-    //Este método es el que finalmente crea el usuario en el sistema
     public void activar(Usuario usuario, MultipartFile imagenFile) {
         usuario.setActivo(true);
         usuarioService.save(usuario, imagenFile,true);
@@ -89,7 +87,6 @@ public class RegistroService {
         return clave;
     }
 
-    //Ojo cómo le lee una informacion del application.properties
     @Value("${servidor.http}")
     private String servidor;
 

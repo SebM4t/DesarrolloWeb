@@ -35,7 +35,6 @@ public class CarroController {
         return "redirect:/carro/listado";
     }
 
-    // --- 1. MOSTRAR EL CARRO ---
     @GetMapping("/listado")
     public String listado(HttpSession session, Model model) {
         List<Item> carro = carroService.obtenerCarro(session);
@@ -74,20 +73,15 @@ public class CarroController {
             HttpSession session,
             Model model) {
         try {
-            // 1. Obtener el carro de la sesión
             List<Item> carro = carroService.obtenerCarro(session);
 
-            // 2. Ejecutar la lógica de negocio (el Service asume cantidad = 1)
             carroService.agregarDisenar(carro, idTamanio, idMaterial);
 
-            // 3. Guardar el carro actualizado en la sesión
             carroService.guardarCarro(session, carro);
 
-            // 4. Recalcular y actualizar el Model con los datos necesarios
             model.addAttribute("carroItems", carro);
             model.addAttribute("totalCarro", carroService.calcularTotal(carro));
 
-            // 5. Retornar el fragmento HTML
         } catch (RuntimeException e) {
             return "redirect:/carro/listado";
         }
@@ -95,7 +89,6 @@ public class CarroController {
 
     }
 
-    // --- 3. ELIMINAR ITEM DEL CARRO ---
     @PostMapping("/eliminar/{idPlaca}")
     public String eliminarItemCategoria(
             @PathVariable("idPlaca") Integer idPlaca,
@@ -131,22 +124,17 @@ public class CarroController {
             HttpSession session,
             Model model) {
 
-        // 1. Obtener la lista del carro de la sesión
         List<Item> carro = carroService.obtenerCarro(session);
 
-        // 2. Buscar el ítem en la lista del carro
         Item item = carroService.buscarItemCategoria(carro, idPlaca);
 
         if (item == null) {
-            // Manejar el caso de que el ítem no esté en el carro
             System.out.println("Hubo problemas");
             return "redirect:/carro/listado";
         }
 
-        // 3. Pasar el ítem encontrado (con su cantidad actual) al modelo
         model.addAttribute("item", item);
 
-        // 4. Retornar la vista
         return "/carro/modifica";
     }
 
@@ -157,27 +145,20 @@ public class CarroController {
             HttpSession session,
             Model model) {
 
-        // 1. Obtener la lista del carro de la sesión
         List<Item> carro = carroService.obtenerCarro(session);
 
-        // 2. Buscar el ítem en la lista del carro
         Item item = carroService.buscarItemDisenar(carro, idTamanio, idMaterial);
 
         if (item == null) {
-            // Manejar el caso de que el ítem no esté en el carro
             System.out.println("Hubo problemas");
             return "redirect:/carro/listado";
         }
 
-        // 3. Pasar el ítem encontrado (con su cantidad actual) al modelo
         model.addAttribute("item", item);
 
-        // 4. Retornar la vista
         return "/carro/modifica";
     }
 
-    // --- 4. ACTUALIZAR CANTIDAD DESDE LA VISTA ---
-    // --- 5. PROCESAR COMPRA (CHECKOUT) ---
     @GetMapping("/facturar/carro")
     public String facturarCarro(HttpSession session, RedirectAttributes redirectAttributes) {
         System.out.println("Va a facturar");
@@ -190,34 +171,27 @@ public class CarroController {
         }
 
         try {
-            // Obtención del usuario autenticado*
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String username = auth.getName();
             System.out.println("El username es:" + username);
             Usuario usuario = usuarioService.getUsuarioPorUsername(username).get();
 
-            // 1. La lógica transaccional ocurre en el servicio
             Factura factura = carroService.procesarCompra(carro, usuario);
 
-            // 2. Limpiar el carro de la sesión después de una compra exitosa
             carroService.limpiarCarro(session);
 
-            // 3. Pasar el ID de la factura como Flash Attribute
             redirectAttributes.addFlashAttribute("idFactura", factura.getIdFactura());
             redirectAttributes.addFlashAttribute("mensaje", "Compra procesada con éxito. Factura Nro: " + factura.getIdFactura());
 
-            // 4. Redirigir a una ruta nueva para ver la factura
             System.out.println("Ver la Factura");
             return "redirect:/carro/verFactura?idFactura=" + factura.getIdFactura();
 
         } catch (RuntimeException e) {
-            // Captura errores de stock, carro vacío o de la transacción
             redirectAttributes.addFlashAttribute("error", "Error al procesar la compra: " + e.getMessage());
             return "redirect:/carro/listado";
         }
     }
 
-    // Nuevo método para mostrar la factura
     @GetMapping("/verFactura")
     public String verFactura(@RequestParam("idFactura") Integer idFactura, Model model) {
         if (idFactura == null) {
@@ -226,6 +200,6 @@ public class CarroController {
 
         Factura factura = facturaService.getFacturaConVentas(idFactura);
         model.addAttribute("factura", factura);
-        return "carro/verFactura"; // Nombre del archivo Thymeleaf
+        return "carro/verFactura"; 
     }
 }

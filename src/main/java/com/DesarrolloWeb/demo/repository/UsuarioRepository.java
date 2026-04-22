@@ -15,13 +15,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     public List<Usuario> findByActivoTrue();
     
     
-    //se utiliza para verificar si hay un usuario con ese username o correo
     public boolean existsByUsernameOrCorreo(String username, String correo);
     
-    //para encontrar un usuario que no se recuerda la clave...busca por username o correo
     public Optional<Usuario> findByUsernameOrCorreo(String username, String correo);
 
-    //Se utiliza para el proceso de activacion final del usuario
     public Optional<Usuario> findByUsernameAndPassword(String username, String Password);
     
     

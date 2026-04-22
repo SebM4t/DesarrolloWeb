@@ -316,3 +316,18 @@ DESCRIBE placa;
 
 Select * from placa;
 update placa set disponible = FALSE WHERE id_placa=9;
+
+SET SQL_SAFE_UPDATES = 0;
+
+UPDATE placa SET imagen_nombre = 'https://storage.googleapis.com/cdlp-c1aae.firebasestorage.app/placas/3ab58abd-2d9a-4d1c-ad03-549ed12fd6de_placamarmol.jpeg' WHERE nombre = 'Placa de Cerámica';
+UPDATE placa SET imagen_nombre = 'https://storage.googleapis.com/cdlp-c1aae.firebasestorage.app/placas/05f2222a-e968-42ca-b206-d5a2fffc9834_placagranito.jpg' WHERE nombre = 'Placa de Granito';
+UPDATE placa SET imagen_nombre = 'https://storage.googleapis.com/cdlp-c1aae.firebasestorage.app/placas/6f358883-153c-4626-8eff-704a8732ad2d_placamarmol2.jpg' WHERE nombre = 'Placa de Mármol';
+UPDATE placa SET imagen_nombre = 'https://storage.googleapis.com/cdlp-c1aae.firebasestorage.app/placas/33cb50ea-83be-467c-883d-1a95f43ccd31_placaaluminiopulido.jpg' WHERE nombre = 'Placa de Aluminio Pulido';
+UPDATE placa SET imagen_nombre = 'https://storage.googleapis.com/cdlp-c1aae.firebasestorage.app/placas/2a16a2a2-75dd-49b6-b2ed-8466356af080_placagranja.jpeg' WHERE nombre = 'Placa de Foto Cerámica';
+UPDATE placa SET imagen_nombre = 'https://storage.googleapis.com/cdlp-c1aae.firebasestorage.app/placas/a8abf89b-e843-493f-a2d0-c7b0b2026af5_placaaluminiofundido.jpg' WHERE nombre = 'Placa de Aluminio Fundido';
+UPDATE placa SET imagen_nombre = 'https://storage.googleapis.com/cdlp-c1aae.firebasestorage.app/placas/6ca13e93-18b6-424b-a7ed-39c2fe2a7b19_esmeraldabasemarmol.jpg' WHERE nombre = 'Esmeralda Base Mármol';
+UPDATE placa SET imagen_nombre = 'https://storage.googleapis.com/cdlp-c1aae.firebasestorage.app/placas/817018c0-bda4-4ac1-ade7-92f2a96cd9cf_reconocimiento_aluminio.jpg' WHERE nombre = 'Reconocimiento de Aluminio';
+UPDATE placa SET imagen_nombre = 'https://storage.googleapis.com/cdlp-c1aae.firebasestorage.app/placas/9b77d27b-ab98-4d24-9195-d97a66883ade_reconocimiento_aluminio2.jpg' WHERE nombre = 'Reconocimiento Aluminio Pulido';
+UPDATE placa SET imagen_nombre = 'https://storage.googleapis.com/cdlp-c1aae.firebasestorage.app/placas/490ea339-06ef-485b-91e6-e66d73ed9588_reconocimiento_acrilico.jpg' WHERE nombre = 'Reconocimiento en Acrílico';
+
+SET SQL_SAFE_UPDATES = 1;

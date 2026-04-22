@@ -52,9 +52,6 @@ public class Placa implements Serializable {
     @Column(nullable = false)
     private Boolean disponible;
 
-//    @Column(length=1024)
-//    @Size(max=1024)
-//    private String imagenUrl;
     
     @ManyToOne
     @JoinColumn(name = "id_categoria")

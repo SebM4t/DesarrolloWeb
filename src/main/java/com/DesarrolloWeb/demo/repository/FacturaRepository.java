@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface FacturaRepository extends JpaRepository<Factura, Integer>{
-    // Consulta para cargar la Factura, su Usuario, sus Ventas y los Placas de esas ventas.
     @Query("SELECT f FROM Factura f " +
        "LEFT JOIN FETCH f.usuario u " +
        "LEFT JOIN FETCH f.ventas v " +

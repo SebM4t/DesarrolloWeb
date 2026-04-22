@@ -28,7 +28,6 @@ public class MascotaController {
         this.categoriaService = categoriaService;
     }
 
-// Lista completa del catálogo
     @GetMapping
     public String catalogo(
             @RequestParam(required = false) Integer idCategoria,

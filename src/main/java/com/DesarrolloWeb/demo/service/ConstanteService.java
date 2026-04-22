@@ -37,15 +37,12 @@ public class ConstanteService {
 
     @Transactional
     public void delete(Integer idConstante) {
-        // Verifica si la categoría existe antes de intentar eliminarlo
         if (!constanteRepository.existsById(idConstante)) {
-            // Lanza una excepción para indicar que el usuario no fue encontrado
             throw new IllegalArgumentException("La Constante con ID " + idConstante + " no existe.");
         }
         try {
             constanteRepository.deleteById(idConstante);
         } catch (DataIntegrityViolationException e) {
-            // Lanza una nueva excepción para encapsular el problema de integridad de datos
             throw new IllegalStateException("No se puede eliminar la constante. Tiene datos asociados.", e);
         }
     }

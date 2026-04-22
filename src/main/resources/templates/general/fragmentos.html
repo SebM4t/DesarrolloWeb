@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <!-- Fragmento #1 que irá en el head de todas las páginas, así se incluye todo lo necesario de configuración-->
     <head th:fragment="head">
         <title>La Casa de la Placa</title>
         <meta charset="UTF-8"/>
@@ -14,7 +13,6 @@
         <script th:src="@{/js/rutinas.js}" defer></script>
     </head>
 
-    <!-- Fragmento #2  define el encabezado de las páginas, en concreto el menú y enlaces rápidos -->
     <header th:fragment="header" class="header">
         <nav class="navbar navbar-expand-lg" style="background-color: #E2B844">
 
@@ -64,7 +62,6 @@
 
                     <ul class="navbar-nav ms-auto">
 
-                        <!-- Mi Cuenta -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button"
                                data-bs-toggle="dropdown" aria-expanded="false">
@@ -84,14 +81,12 @@
 
                             <ul class="dropdown-menu dropdown-menu-end">
 
-                                <!-- SI NO está autenticado -->
                                 <li sec:authorize="!isAuthenticated()">
                                     <a class="dropdown-item" th:href="@{/login}">
                                         <i class="fas fa-sign-in-alt"></i> Autenticar
                                     </a>
                                 </li>
 
-                                <!-- SI está autenticado -->
                                 <li sec:authorize="isAuthenticated()">
                                     <button class="dropdown-item"
                                             type="button"
@@ -123,29 +118,10 @@
                             </a>
                         </li>
                     </ul>
-
-
-
-
-                    <!--<div id="resultBlock">
-                       </div>
-                       <ul class="navbar-nav" sec:authorize="!isAuthenticated()">
-                           <li class="nav-item my-auto">
-                               <a class="nav-link" th:href="@{/login}">
-                                   <i class="fas fa-sign-in-alt"> </i>
-                                    <span class="ms-1"> [[#{login.login}]]</span>
-       
-                               </a>
-       
-                           </li>
-                       </ul>-->
-
-
                 </div>
             </div>
         </nav>
 
-        <!-- OFFCANVAS PERFIL -->
         <div class="offcanvas offcanvas-start"
              tabindex="-1"
              id="offcanvasPerfil"
@@ -200,13 +176,10 @@
     </header>
 
 
-
-    <!-- Fragmento #3 define el footer de las páginas, aparte de esto se podria incluir enlaces a redes socilaes y demás -->
     <footer th:fragment="footer" class="p-2 mt-5 text-black" style="background-color: #E2B844">
         <p>[[#{plantilla.derechos}]]</p>
     </footer>
 
-    <!-- Fragmento #4 tablas del inicio con la historia de la empresa -->
     <section th:fragment="inicio">
         <div class="container mt-4">
             <div class="row g-3">

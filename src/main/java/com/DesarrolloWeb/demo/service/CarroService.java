@@ -35,7 +35,6 @@ public class CarroService {
         this.ventaRepository = ventaRepository;
     }
 
-    // --- 1. Gestión de Sesión ---
     public List<Item> obtenerCarro(HttpSession session) {
         @SuppressWarnings("unchecked")
         List<Item> carro = (List<Item>) session.getAttribute(ATTRIBUTE_CARRO);
@@ -103,9 +102,9 @@ public class CarroService {
         }
 
         return carro.stream()
-                .filter(item -> item.getPlaca().getIdPlaca().equals(idPlaca)) // Filtra por el ID
-                .findFirst() // Obtiene el primer elemento
-                .orElse(null);                                                        // Retorna null si no lo encuentra
+                .filter(item -> item.getPlaca().getIdPlaca().equals(idPlaca))
+                .findFirst() 
+                .orElse(null);
     }
 
     public Item buscarItemDisenar(List<Item> carro, Integer idTamanio, Integer idMaterial) {
@@ -120,12 +119,10 @@ public class CarroService {
     }
 
     public void eliminarItemCategoria(List<Item> carro, Integer idPlaca) {
-        // Usar List.removeIf es una forma concisa de eliminar por condición
         carro.removeIf(item -> item.getPlaca().getIdPlaca().equals(idPlaca));
     }
 
     public void eliminarItemDisenar(List<Item> carro, Integer idTamanio, Integer idMaterial) {
-        // Usar List.removeIf es una forma concisa de eliminar por condición
         carro.removeIf(item -> item.getMaterial().getIdMaterial().equals(idMaterial)
                 && item.getTamanio().getIdTamanio().equals(idTamanio));
     }
@@ -158,7 +155,6 @@ public class CarroService {
             throw new RuntimeException("El carro está vacío para procesar la compra.");
         }
 
-        // 1. CREAR Y PERSISTIR FACTURA
         Factura factura = new Factura();
         factura.setUsuario(usuario);
         factura.setFecha(java.time.LocalDateTime.now());
@@ -166,9 +162,8 @@ public class CarroService {
         factura.setEstado(EstadoFactura.Pagada);
         factura.setFechaCreacion(LocalDateTime.now());
         factura.setFechaModificacion(LocalDateTime.now());
-        factura = facturaRepository.save(factura); // Persistir para obtener el idFactura
+        factura = facturaRepository.save(factura); 
 
-        // 2. CREAR Y PERSISTIR LINEAS DE VENTA (Venta) y ACTUALIZAR STOCK
         for (Item item : carro) {
             Venta venta = new Venta();
             venta.setFactura(factura);
@@ -192,7 +187,6 @@ public class CarroService {
 
             ventaRepository.save(venta);
         }
-        // 3. Limpiar carro (El controller se encargará de esto)
         return factura;
     }
 }

@@ -55,7 +55,7 @@ public class PlacaService {
             try {
                 String url = firebaseStorageService.uploadImage(imagenFile, "placas", placa.getIdPlaca());
                 placa.setImagenNombre(url);
-                placaRepository.save(placa); // guarda de nuevo con la URL
+                placaRepository.save(placa); 
             } catch (IOException e) {
                 System.out.println("Error al subir imagen: " + e.getMessage());
             }
